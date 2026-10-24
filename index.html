@@ -21,6 +21,7 @@
             }
         }
     </script>
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { background-color: #0b0f19; color: #f3f4f6; font-family: system-ui, -apple-system, sans-serif; }
@@ -39,6 +40,12 @@
         <span id="toast-msg">Data Auto-Saved Successfully!</span>
     </div>
 
+    <!-- Sirens Banner (Backlog Alert) -->
+    <div id="backlog-siren-banner" class="hidden bg-rose-600/90 text-white px-4 py-2 text-center text-sm font-bold animate-pulse flex items-center justify-center space-x-3 z-40">
+        <i class="fa-solid fa-triangle-exclamation text-lg"></i>
+        <span>WARNING: Preparation Pace Behind Schedule! Increase daily sub-topic completion rate!</span>
+    </div>
+
     <!-- Header / Navbar -->
     <header class="sticky top-0 z-30 glass-panel border-b border-gray-800/80">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-4">
@@ -49,7 +56,7 @@
                 <div>
                     <h1 class="text-lg font-black tracking-tight text-white flex items-center gap-2">
                         NEET 2027 MASTERY OS
-                        <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-brand-500/20 text-brand-400 border border-brand-500/30">Dropper Engine</span>
+                        <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-brand-500/20 text-brand-400 border border-brand-500/30">Dropper Edition</span>
                     </h1>
                     <p class="text-xs text-gray-400" id="header-countdown">Target: NEET May 2027</p>
                 </div>
@@ -74,7 +81,11 @@
 
         <!-- Navigation Tabs -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex space-x-1 overflow-x-auto py-2 border-t border-gray-800/50 text-xs font-semibold scrollbar-none">
-            <button onclick="switchTab('timetable')" id="tab-btn-timetable" class="tab-btn active px-4 py-2 rounded-lg transition whitespace-nowrap flex items-center space-x-2">
+            <button onclick="switchTab('dashboard')" id="tab-btn-dashboard" class="tab-btn active px-4 py-2 rounded-lg transition whitespace-nowrap flex items-center space-x-2">
+                <i class="fa-solid fa-chart-line"></i>
+                <span>Smart Dashboard</span>
+            </button>
+            <button onclick="switchTab('timetable')" id="tab-btn-timetable" class="tab-btn px-4 py-2 rounded-lg text-gray-400 hover:text-white transition whitespace-nowrap flex items-center space-x-2">
                 <i class="fa-solid fa-calendar-week"></i>
                 <span>Weekly Timetable (Sunday Lock)</span>
             </button>
@@ -94,113 +105,396 @@
                 <i class="fa-solid fa-calendar-day"></i>
                 <span>Aaj Kya Padha</span>
             </button>
+            <button onclick="switchTab('break')" id="tab-btn-break" class="tab-btn px-4 py-2 rounded-lg text-gray-400 hover:text-white transition whitespace-nowrap flex items-center space-x-2">
+                <i class="fa-solid fa-film"></i>
+                <span>Horror Break</span>
+            </button>
         </div>
     </header>
 
     <!-- Main Content Container -->
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
-        <!-- SECTION: WEEKLY TIMETABLE & SUNDAY LOCK MANAGER -->
-        <section id="view-timetable" class="space-y-6">
-            
-            <!-- Status Badge Header -->
+        <!-- 1. DASHBOARD & VELOCITY ENGINE -->
+        <section id="view-dashboard" class="space-y-6">
+            <div class="glass-panel p-6 rounded-3xl border border-brand-500/30 bg-gradient-to-r from-brand-900/40 to-black relative overflow-hidden">
+                <div class="flex flex-col lg:flex-row items-center justify-between gap-6 relative z-10">
+                    <div class="space-y-2 text-center lg:text-left">
+                        <span class="text-xs font-extrabold uppercase tracking-widest text-brand-400 bg-brand-500/20 px-3 py-1 rounded-full border border-brand-500/30">NEET 2027 Countdown</span>
+                        <h2 class="text-4xl sm:text-5xl font-black text-white tracking-tight" id="dash-days-left">0 Days Left</h2>
+                        <p class="text-xs text-gray-400" id="dash-hours-left">Calculating exact time remaining...</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 w-full lg:w-auto text-center">
+                        <div class="bg-gray-900/80 p-4 rounded-2xl border border-gray-800">
+                            <span class="text-[10px] text-gray-400 uppercase font-bold block">Actual Speed</span>
+                            <span class="text-xl font-black text-emerald-400" id="dash-actual-speed">0 Subtopics/day</span>
+                        </div>
+                        <div class="bg-gray-900/80 p-4 rounded-2xl border border-gray-800">
+                            <span class="text-[10px] text-gray-400 uppercase font-bold block">Required Speed</span>
+                            <span class="text-xl font-black text-indigo-400" id="dash-req-speed">1.2 Subtopics/day</span>
+                        </div>
+                        <div class="bg-gray-900/80 p-4 rounded-2xl border border-gray-800 col-span-2 sm:col-span-1">
+                            <span class="text-[10px] text-gray-400 uppercase font-bold block">Est. Finish Date</span>
+                            <span class="text-sm font-black text-amber-400 mt-1 block" id="dash-est-date">Calculating...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subject Breakdown -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="glass-panel p-5 rounded-2xl border border-gray-800 space-y-3">
+                    <div class="flex items-center justify-between"><span class="text-xs font-bold text-gray-400">Zoology (16 Ch)</span><span class="text-xs font-black text-emerald-400" id="dash-zoo-pc">0%</span></div>
+                    <div class="w-full bg-gray-800 h-2 rounded-full overflow-hidden"><div id="dash-zoo-bar" class="bg-emerald-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div></div>
+                </div>
+                <div class="glass-panel p-5 rounded-2xl border border-gray-800 space-y-3">
+                    <div class="flex items-center justify-between"><span class="text-xs font-bold text-gray-400">Botany (15 Ch)</span><span class="text-xs font-black text-emerald-400" id="dash-bot-pc">0%</span></div>
+                    <div class="w-full bg-gray-800 h-2 rounded-full overflow-hidden"><div id="dash-bot-bar" class="bg-emerald-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div></div>
+                </div>
+                <div class="glass-panel p-5 rounded-2xl border border-gray-800 space-y-3">
+                    <div class="flex items-center justify-between"><span class="text-xs font-bold text-gray-400">Physics (30 Ch)</span><span class="text-xs font-black text-indigo-400" id="dash-phy-pc">0%</span></div>
+                    <div class="w-full bg-gray-800 h-2 rounded-full overflow-hidden"><div id="dash-phy-bar" class="bg-indigo-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div></div>
+                </div>
+                <div class="glass-panel p-5 rounded-2xl border border-gray-800 space-y-3">
+                    <div class="flex items-center justify-between"><span class="text-xs font-bold text-gray-400">Chemistry (25 Ch)</span><span class="text-xs font-black text-purple-400" id="dash-chem-pc">0%</span></div>
+                    <div class="w-full bg-gray-800 h-2 rounded-full overflow-hidden"><div id="dash-chem-bar" class="bg-purple-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. WEEKLY TIMETABLE (SUNDAY LOCK) -->
+        <section id="view-timetable" class="hidden space-y-6">
             <div class="glass-panel p-5 rounded-2xl border border-gray-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div class="space-y-1">
                     <h2 class="text-base font-extrabold text-white flex items-center space-x-2">
-                        <i class="fa-solid fa-clock text-indigo-400"></i>
+                        <i class="fa-solid fa-calendar-week text-indigo-400"></i>
                         <span>Weekly Customized Timetable & Routine</span>
                     </h2>
                     <p class="text-xs text-gray-400">Mon–Sat strictly locked. Unlocks every Sunday for weekly routine adjustment.</p>
                 </div>
-
-                <!-- Lock Status Indicator -->
                 <div id="lock-status-pill" class="px-4 py-2 rounded-xl text-xs font-bold flex items-center space-x-2 border transition">
                     <i id="lock-icon" class="fa-solid fa-lock"></i>
                     <span id="lock-text">Checking Lock Status...</span>
                 </div>
             </div>
 
-            <!-- Library Commute & Routine Setup Card -->
-            <div class="glass-panel p-6 rounded-2xl border border-gray-800 space-y-4" id="timetable-form-card">
+            <div class="glass-panel p-6 rounded-2xl border border-gray-800 space-y-4">
                 <div class="flex items-center justify-between">
                     <h3 class="text-xs font-extrabold uppercase tracking-wider text-brand-400">Library Commute & Fixed Slots</h3>
-                    <button onclick="emergencyUnlock()" id="btn-emergency-unlock" class="text-[11px] text-amber-400 hover:underline flex items-center space-x-1">
+                    <button onclick="emergencyUnlock()" class="text-[11px] text-amber-400 hover:underline flex items-center space-x-1">
                         <i class="fa-solid fa-key"></i>
-                        <span>Emergency Bypass Lock</span>
+                        <span>Emergency Bypass Lock (PIN: 2027)</span>
                     </button>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
                         <label class="block text-[11px] text-gray-400 mb-1">Library Entry Time</label>
-                        <input type="time" id="time-lib-entry" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500">
+                        <input type="time" id="time-lib-entry" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white">
                     </div>
                     <div>
                         <label class="block text-[11px] text-gray-400 mb-1">Library Exit Time</label>
-                        <input type="time" id="time-lib-exit" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500">
+                        <input type="time" id="time-lib-exit" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white">
                     </div>
                     <div>
                         <label class="block text-[11px] text-gray-400 mb-1">Commute Travel Duration (Mins)</label>
-                        <input type="number" id="time-commute-mins" placeholder="e.g. 25" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500">
+                        <input type="number" id="time-commute-mins" placeholder="e.g. 25" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white">
                     </div>
                 </div>
 
                 <div class="space-y-2">
                     <label class="block text-[11px] text-gray-400">Weekly Scheduled Batch Lectures & Targets (Mon to Sat)</label>
-                    <textarea id="weekly-lecture-plan" rows="4" placeholder="Log upcoming week online PW lectures... e.g. Mon: Physics Rotation Lec 1-2 | Tue: Organic GOC..." class="w-full bg-gray-900 border border-gray-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-indigo-500"></textarea>
+                    <textarea id="weekly-lecture-plan" rows="4" placeholder="Log upcoming week online PW lectures..." class="w-full bg-gray-900 border border-gray-700 rounded-xl p-3 text-xs text-white"></textarea>
                 </div>
 
-                <button id="btn-save-timetable" onclick="saveTimetable()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs px-5 py-2.5 rounded-xl transition flex items-center space-x-2">
-                    <i class="fa-solid fa-floppy-disk"></i>
-                    <span>Save Weekly Schedule</span>
+                <button id="btn-save-timetable" onclick="saveTimetable()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs px-5 py-2.5 rounded-xl transition">
+                    Save & Lock Weekly Schedule
                 </button>
             </div>
+        </section>
 
-            <!-- Display Current Locked Schedule -->
-            <div class="glass-panel p-6 rounded-2xl border border-gray-800 space-y-4">
-                <h3 class="text-xs font-extrabold uppercase tracking-wider text-emerald-400">Active Locked Schedule (Current Week)</h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-                    <div class="bg-gray-900 p-4 rounded-xl border border-gray-800 space-y-1">
-                        <span class="text-gray-500 block text-[10px] uppercase font-bold">Library Hours</span>
-                        <p class="font-bold text-white text-sm" id="disp-lib-hours">Not Set</p>
-                    </div>
-                    <div class="bg-gray-900 p-4 rounded-xl border border-gray-800 space-y-1">
-                        <span class="text-gray-500 block text-[10px] uppercase font-bold">Commute Duration</span>
-                        <p class="font-bold text-indigo-400 text-sm" id="disp-commute">0 Mins</p>
-                    </div>
-                    <div class="bg-gray-900 p-4 rounded-xl border border-gray-800 space-y-1">
-                        <span class="text-gray-500 block text-[10px] uppercase font-bold">Schedule Lock Status</span>
-                        <p class="font-bold text-emerald-400 text-sm" id="disp-lock-badge">Locked Mon-Sat</p>
-                    </div>
+        <!-- 3. SYLLABUS & ANTI-CHEATING QUIZ GATE -->
+        <section id="view-tracker" class="hidden space-y-6">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 glass-panel p-4 rounded-2xl">
+                <div class="flex flex-wrap gap-2 text-xs font-semibold" id="subject-filter-container">
+                    <button onclick="filterSubject('ALL')" class="subject-filter-btn px-3 py-1.5 rounded-lg bg-brand-600 text-white">All (87)</button>
+                    <button onclick="filterSubject('ZOOLOGY')" class="subject-filter-btn px-3 py-1.5 rounded-lg bg-gray-800 text-gray-400">Zoology (16)</button>
+                    <button onclick="filterSubject('BOTANY')" class="subject-filter-btn px-3 py-1.5 rounded-lg bg-gray-800 text-gray-400">Botany (15)</button>
+                    <button onclick="filterSubject('PHYSICS')" class="subject-filter-btn px-3 py-1.5 rounded-lg bg-gray-800 text-gray-400">Physics (30)</button>
+                    <button onclick="filterSubject('CHEMISTRY')" class="subject-filter-btn px-3 py-1.5 rounded-lg bg-gray-800 text-gray-400">Chemistry (25)</button>
                 </div>
-                <div class="bg-gray-900 p-4 rounded-xl border border-gray-800 space-y-2">
-                    <span class="text-gray-500 block text-[10px] uppercase font-bold">Planned Online Batch Lectures</span>
-                    <p class="text-xs text-gray-300 whitespace-pre-line leading-relaxed" id="disp-weekly-plan">No weekly targets logged yet. Fill form on Sunday to lock!</p>
+                <div class="relative w-full md:w-64">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-gray-500 text-xs"></i>
+                    <input type="text" id="search-input" oninput="renderSyllabus()" placeholder="Search chapters..." class="w-full bg-gray-900 text-xs text-white pl-9 pr-3 py-2 rounded-xl border border-gray-700">
                 </div>
             </div>
 
+            <div id="syllabus-accordion-container" class="space-y-4"></div>
+        </section>
+
+        <!-- 4. PW DPP MANAGER -->
+        <section id="view-dpp" class="hidden space-y-6">
+            <div class="glass-panel p-6 rounded-2xl border border-gray-800 space-y-4">
+                <h2 class="text-base font-bold text-white flex items-center space-x-2">
+                    <i class="fa-solid fa-book-open text-indigo-400"></i>
+                    <span>Physics Wallah (PW) DPP Book Tracker</span>
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <input type="text" id="dpp-book-name" placeholder="DPP Book Title" class="bg-gray-900 text-xs border border-gray-700 rounded-xl px-3 py-2 text-white">
+                    <input type="number" id="dpp-total-sheets" placeholder="Total Sheets" class="bg-gray-900 text-xs border border-gray-700 rounded-xl px-3 py-2 text-white">
+                    <input type="number" id="dpp-solved-sheets" placeholder="Solved Sheets" class="bg-gray-900 text-xs border border-gray-700 rounded-xl px-3 py-2 text-white">
+                    <button onclick="addDPPBook()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs px-4 py-2 rounded-xl">+ Add DPP Book</button>
+                </div>
+            </div>
+            <div id="dpp-books-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+        </section>
+
+        <!-- 5. AI VOICE VIVA PROCTOR -->
+        <section id="view-viva" class="hidden space-y-6">
+            <div class="glass-panel p-6 rounded-2xl border border-gray-800 space-y-6 max-w-3xl mx-auto text-center">
+                <h2 class="text-lg font-black text-white"><i class="fa-solid fa-camera-rotate text-purple-400"></i> WebRTC AI Proctored Viva Examiner</h2>
+                <div class="relative w-full max-w-md mx-auto aspect-video bg-black rounded-2xl overflow-hidden border border-gray-800 flex items-center justify-center">
+                    <video id="viva-webcam" autoplay playsinline muted class="w-full h-full object-cover"></video>
+                    <div id="viva-cam-placeholder" class="absolute inset-0 flex flex-col items-center justify-center text-gray-600 space-y-2">
+                        <i class="fa-solid fa-video-slash text-3xl"></i>
+                        <span class="text-xs">Camera Inactive</span>
+                    </div>
+                </div>
+                <div class="flex items-center justify-center space-x-4">
+                    <button id="btn-start-viva" onclick="startVivaSession()" class="bg-brand-600 text-white px-5 py-2.5 rounded-xl font-bold text-xs">Start Viva</button>
+                    <button id="btn-stop-viva" onclick="stopVivaSession()" class="hidden bg-rose-600 text-white px-5 py-2.5 rounded-xl font-bold text-xs">End Session</button>
+                </div>
+                <div id="viva-dialog-box" class="hidden glass-panel p-4 rounded-xl text-left space-y-3">
+                    <p id="viva-question-text" class="text-sm font-medium text-white italic">"Press start to begin oral examination..."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. AAJ KYA PADHA LOGGER -->
+        <section id="view-daily" class="hidden space-y-6">
+            <div class="glass-panel p-6 rounded-2xl border border-gray-800 space-y-4">
+                <h2 class="text-base font-bold text-white"><i class="fa-solid fa-pen-to-square text-emerald-400"></i> Daily Study & DPP Log Entry</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <input type="text" id="daily-topic" placeholder="Topic Studied Today" class="bg-gray-900 text-xs border border-gray-700 rounded-xl px-3 py-2 text-white">
+                    <input type="number" id="daily-hours" placeholder="Study Hours" class="bg-gray-900 text-xs border border-gray-700 rounded-xl px-3 py-2 text-white">
+                    <input type="number" id="daily-questions" placeholder="Questions Solved" class="bg-gray-900 text-xs border border-gray-700 rounded-xl px-3 py-2 text-white">
+                </div>
+                <textarea id="daily-notes" rows="3" placeholder="Key formula or notes..." class="w-full bg-gray-900 text-xs border border-gray-700 rounded-xl p-3 text-white"></textarea>
+                <button onclick="addDailyLog()" class="bg-emerald-600 text-white font-semibold text-xs px-5 py-2.5 rounded-xl">+ Log Daily Progress</button>
+            </div>
+            <div id="daily-logs-list" class="space-y-3"></div>
+        </section>
+
+        <!-- 7. REST & HORROR BREAK TIMER -->
+        <section id="view-break" class="hidden space-y-6">
+            <div class="glass-panel p-6 rounded-2xl border border-gray-800 text-center space-y-6 max-w-2xl mx-auto">
+                <h2 class="text-lg font-black text-white"><i class="fa-solid fa-ghost text-rose-500"></i> Guilt-Free Horror Media Rest Timer</h2>
+                <div class="text-5xl font-black font-mono tracking-widest text-brand-400" id="break-timer-display">30:00</div>
+                <div class="flex items-center justify-center space-x-3">
+                    <button onclick="startBreakTimer(30)" class="bg-brand-600 text-white text-xs font-bold px-4 py-2 rounded-xl">Start 30 Min Break</button>
+                    <button onclick="resetBreakTimer()" class="bg-gray-800 text-gray-300 text-xs font-bold px-4 py-2 rounded-xl">Reset</button>
+                </div>
+                <div class="text-left border-t border-gray-800 pt-4 space-y-3">
+                    <h3 class="text-xs font-bold text-gray-400 uppercase">Curated Horror Recs:</h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
+                        <div class="bg-gray-900 p-2.5 rounded-xl border border-gray-800"><span class="font-bold text-white block">Sinister</span></div>
+                        <div class="bg-gray-900 p-2.5 rounded-xl border border-gray-800"><span class="font-bold text-white block">The Conjuring</span></div>
+                        <div class="bg-gray-900 p-2.5 rounded-xl border border-gray-800"><span class="font-bold text-white block">Talk to Me</span></div>
+                    </div>
+                </div>
+            </div>
         </section>
 
     </main>
 
-    <script>
-        // Check if today is Sunday (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
-        let isSundayUnlocked = false;
+    <!-- QUIZ GATE MODAL -->
+    <div id="quiz-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-panel max-w-xl w-full rounded-2xl p-6 space-y-5 border border-brand-500/30">
+            <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+                <div class="text-brand-400 font-bold text-sm"><i class="fa-solid fa-shield-halved"></i> Anti-Cheating Diagnostic Quiz Gate</div>
+                <button onclick="closeQuizModal()" class="text-gray-500 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <p class="text-xs text-amber-400">Score 80%+ (4/5 correct) to unlock verified completion status.</p>
+            <div id="quiz-question-container" class="space-y-4"></div>
+            <div class="flex items-center justify-between pt-3 border-t border-gray-800">
+                <span id="quiz-step-counter" class="text-xs text-gray-500">Question 1 of 5</span>
+                <button onclick="submitQuizAnswer()" class="bg-brand-600 text-white font-bold text-xs px-5 py-2.5 rounded-xl">Submit & Next</button>
+            </div>
+        </div>
+    </div>
 
+    <!-- SCRIPT LOGIC -->
+    <script>
+        const MASTER_SYLLABUS = [
+            // Zoology (16)
+            { id: "zoo_1", subject: "ZOOLOGY", title: "1. Structural Organisation in Animals", subtopics: ["Epithelial Tissues", "Connective Tissues", "Muscle & Neural Tissues", "Organ System"] },
+            { id: "zoo_2", subject: "ZOOLOGY", title: "2. Biomolecules", subtopics: ["Carbohydrates & Lipids", "Proteins & Amino Acids", "Nucleic Acids", "Enzyme Kinetics"] },
+            { id: "zoo_3", subject: "ZOOLOGY", title: "3. Breathing and Exchange of Gases", subtopics: ["Respiratory Organs", "Mechanism of Breathing", "Transport of Gases", "Respiratory Disorders"] },
+            { id: "zoo_4", subject: "ZOOLOGY", title: "4. Body Fluids and Circulation", subtopics: ["Blood Components", "Human Heart Structure", "ECG & Double Circulation", "Disorders"] },
+            { id: "zoo_5", subject: "ZOOLOGY", title: "5. Excretory Products and Their Elimination", subtopics: ["Human Excretory System", "Urine Formation", "Counter Current Mechanism", "Disorders"] },
+            { id: "zoo_6", subject: "ZOOLOGY", title: "6. Locomotion and Movement", subtopics: ["Muscle Structure", "Muscle Contraction", "Skeletal System", "Disorders"] },
+            { id: "zoo_7", subject: "ZOOLOGY", title: "7. Neural Control and Coordination", subtopics: ["Neuron Structure", "Central Nervous System", "Reflex Action", "Sensory Reception"] },
+            { id: "zoo_8", subject: "ZOOLOGY", title: "8. Chemical Coordination and Integration", subtopics: ["Endocrine Glands", "Pituitary & Hypothalamus", "Thyroid & Adrenal", "Hormone Action"] },
+            { id: "zoo_9", subject: "ZOOLOGY", title: "9. Animal Kingdom", subtopics: ["Basis of Classification", "Non-Chordates", "Chordates", "Vertebrata Classes"] },
+            { id: "zoo_10", subject: "ZOOLOGY", title: "10. Cockroach and Frog", subtopics: ["Cockroach Anatomy", "Frog Morphology", "Frog Physiology"] },
+            { id: "zoo_11", subject: "ZOOLOGY", title: "11. Human Reproduction", subtopics: ["Male Reproductive System", "Female Reproductive System", "Gametogenesis", "Menstrual Cycle & Fertilization"] },
+            { id: "zoo_12", subject: "ZOOLOGY", title: "12. Reproductive Health", subtopics: ["Contraceptive Methods", "STIs & Infertility", "ART Technologies"] },
+            { id: "zoo_13", subject: "ZOOLOGY", title: "13. Evolution", subtopics: ["Origin of Life", "Evidences", "Hardy-Weinberg Principle", "Human Evolution"] },
+            { id: "zoo_14", subject: "ZOOLOGY", title: "14. Human Health and Disease", subtopics: ["Pathogens & Diseases", "Immunity", "AIDS & Cancer", "Drug Abuse"] },
+            { id: "zoo_15", subject: "ZOOLOGY", title: "15. Biotechnology Principles and Processes", subtopics: ["Restriction Enzymes", "Vectors & Recombinant DNA", "Processes", "Bioreactors"] },
+            { id: "zoo_16", subject: "ZOOLOGY", title: "16. Biotechnology and Its Applications", subtopics: ["Bt Crops & RNAi", "Gene Therapy", "Transgenic Animals", "Biosafety Issues"] },
+            // Botany (15)
+            { id: "bot_1", subject: "BOTANY", title: "1. Cell the Unit of Life", subtopics: ["Prokaryotic Cell", "Cell Membrane", "Endomembrane System", "Organelles"] },
+            { id: "bot_2", subject: "BOTANY", title: "2. Cell Cycle and Cell Division", subtopics: ["Interphase & Mitosis", "Meiosis I & II", "Regulation"] },
+            { id: "bot_3", subject: "BOTANY", title: "3. Principle of Inheritance and Variation", subtopics: ["Mendel's Laws", "Non-Mendelian", "Sex Determination", "Pedigree Analysis"] },
+            { id: "bot_4", subject: "BOTANY", title: "4. Molecular Basis of Inheritance", subtopics: ["DNA Structure", "Replication", "Transcription", "Translation & Operon"] },
+            { id: "bot_5", subject: "BOTANY", title: "5. The Living World", subtopics: ["Characteristics", "Taxonomy", "Categories"] },
+            { id: "bot_6", subject: "BOTANY", title: "6. Biological Classification", subtopics: ["Monera & Protista", "Fungi", "Viruses & Lichens"] },
+            { id: "bot_7", subject: "BOTANY", title: "7. Microbes in Human Welfare", subtopics: ["Household & Industry", "Sewage Treatment", "Biocontrol"] },
+            { id: "bot_8", subject: "BOTANY", title: "8. Anatomy of Flowering Plants", subtopics: ["Tissues", "Tissue Systems", "Anatomy of Dicot/Monocot"] },
+            { id: "bot_9", subject: "BOTANY", title: "9. Sexual Reproduction in Flowering Plants", subtopics: ["Flower Structure", "Pollination", "Double Fertilization", "Seed Development"] },
+            { id: "bot_10", subject: "BOTANY", title: "10. Respiration in Plants", subtopics: ["Glycolysis", "Fermentation", "TCA Cycle & ETS", "RQ"] },
+            { id: "bot_11", subject: "BOTANY", title: "11. Photosynthesis in Higher Plants", subtopics: ["Light Reaction", "C3 Cycle", "C4 Cycle", "Photorespiration"] },
+            { id: "bot_12", subject: "BOTANY", title: "12. Plant Growth and Development", subtopics: ["Growth Phases", "Plant Hormones", "Photoperiodism"] },
+            { id: "bot_13", subject: "BOTANY", title: "13. Organism and Populations", subtopics: ["Abiotic Factors", "Population Growth", "Interactions"] },
+            { id: "bot_14", subject: "BOTANY", title: "14. Ecosystem", subtopics: ["Productivity", "Energy Flow", "Ecological Pyramids"] },
+            { id: "bot_15", subject: "BOTANY", title: "15. Biodiversity and Conservation", subtopics: ["Levels & Patterns", "Loss of Biodiversity", "Conservation"] },
+            // Physics (30)
+            { id: "phy_1", subject: "PHYSICS", title: "1. Unit and Measurements", subtopics: ["SI Units", "Dimensions", "Errors"] },
+            { id: "phy_2", subject: "PHYSICS", title: "2. Mathematical Tools", subtopics: ["Vectors", "Differentiation", "Integration"] },
+            { id: "phy_3", subject: "PHYSICS", title: "3. Motion in a Straight Line", subtopics: ["Displacement & Velocity", "Kinematic Equations", "Relative Motion"] },
+            { id: "phy_4", subject: "PHYSICS", title: "4. Motion in a Plane", subtopics: ["Projectiles", "Circular Motion"] },
+            { id: "phy_5", subject: "PHYSICS", title: "5. Newton's Laws of Motion", subtopics: ["FBD", "Friction", "Circular Banking"] },
+            { id: "phy_6", subject: "PHYSICS", title: "6. Work Energy and Power", subtopics: ["Work-Energy Theorem", "Potential Energy", "Collisions"] },
+            { id: "phy_7", subject: "PHYSICS", title: "7. Centre of Mass and System of Particles", subtopics: ["CM Calculation", "Momentum Conservation"] },
+            { id: "phy_8", subject: "PHYSICS", title: "8. Rotation Motion", subtopics: ["Torque", "Moment of Inertia", "Rolling Motion"] },
+            { id: "phy_9", subject: "PHYSICS", title: "9. Gravitation", subtopics: ["Universal Law", "Acceleration g", "Kepler's Laws"] },
+            { id: "phy_10", subject: "PHYSICS", title: "10. Mechanical Properties of Solids", subtopics: ["Stress & Strain", "Modulus of Elasticity"] },
+            { id: "phy_11", subject: "PHYSICS", title: "11. Mechanical Properties of Fluids", subtopics: ["Pascal's Law", "Bernoulli's Principle", "Surface Tension"] },
+            { id: "phy_12", subject: "PHYSICS", title: "12. Thermal Properties of Matter", subtopics: ["Thermal Expansion", "Calorimetry", "Heat Transfer"] },
+            { id: "phy_13", subject: "PHYSICS", title: "13. Kinetic Theory of Gases", subtopics: ["Ideal Gas Laws", "RMS Speed", "Equipartition"] },
+            { id: "phy_14", subject: "PHYSICS", title: "14. Thermodynamics", subtopics: ["First Law", "Processes", "Heat Engines"] },
+            { id: "phy_15", subject: "PHYSICS", title: "15. Oscillations", subtopics: ["SHM Equations", "Energy in SHM", "Pendulum"] },
+            { id: "phy_16", subject: "PHYSICS", title: "16. Waves", subtopics: ["Wave Equation", "Superposition", "Doppler Effect"] },
+            { id: "phy_17", subject: "PHYSICS", title: "17. Electric Charge and Fields", subtopics: ["Coulomb's Law", "Electric Field", "Gauss's Law"] },
+            { id: "phy_18", subject: "PHYSICS", title: "18. Electrostatic Potential and Capacitance", subtopics: ["Potential", "Capacitors", "Dielectrics"] },
+            { id: "phy_19", subject: "PHYSICS", title: "19. Current Electricity", subtopics: ["Ohm's Law", "Kirchhoff's Laws", "Potentiometer"] },
+            { id: "phy_20", subject: "PHYSICS", title: "20. Moving Charges and Magnetism", subtopics: ["Biot-Savart Law", "Lorentz Force", "Galvanometer"] },
+            { id: "phy_21", subject: "PHYSICS", title: "21. Magnetism and Matter", subtopics: ["Bar Magnet", "Earth Magnetism"] },
+            { id: "phy_22", subject: "PHYSICS", title: "22. Electromagnetic Induction", subtopics: ["Faraday's Law", "Inductance"] },
+            { id: "phy_23", subject: "PHYSICS", title: "23. Alternating Current", subtopics: ["LCR Circuits", "Resonance", "Transformer"] },
+            { id: "phy_24", subject: "PHYSICS", title: "24. Electromagnetic Waves", subtopics: ["Displacement Current", "EM Spectrum"] },
+            { id: "phy_25", subject: "PHYSICS", title: "25. Ray Optics and Optical Instruments", subtopics: ["Reflection & Refraction", "Prisms", "Lenses"] },
+            { id: "phy_26", subject: "PHYSICS", title: "26. Wave Optics", subtopics: ["Interference", "YDSE", "Diffraction"] },
+            { id: "phy_27", subject: "PHYSICS", title: "27. Dual Nature of Radiation and Matter", subtopics: ["Photoelectric Effect", "De Broglie Waves"] },
+            { id: "phy_28", subject: "PHYSICS", title: "28. Atoms", subtopics: ["Bohr Model", "Spectral Series"] },
+            { id: "phy_29", subject: "PHYSICS", title: "29. Nuclei", subtopics: ["Binding Energy", "Radioactivity", "Fission/Fusion"] },
+            { id: "phy_30", subject: "PHYSICS", title: "30. Semiconductor Electronics", subtopics: ["Diodes", "Rectifiers", "Logic Gates"] },
+            // Chemistry (25)
+            { id: "chem_1", subject: "CHEMISTRY", title: "1. Some Basic Concepts of Chemistry", subtopics: ["Mole Concept", "Stoichiometry", "Concentration Terms"] },
+            { id: "chem_2", subject: "CHEMISTRY", title: "2. Redox Reactions", subtopics: ["Oxidation Number", "Balancing Redox"] },
+            { id: "chem_3", subject: "CHEMISTRY", title: "3. Structure of Atom", subtopics: ["Bohr Model", "Quantum Numbers", "Orbitals"] },
+            { id: "chem_4", subject: "CHEMISTRY", title: "4. Classification & Periodicity", subtopics: ["Radius & Ionization Energy", "Electronegativity"] },
+            { id: "chem_5", subject: "CHEMISTRY", title: "5. Chemical Bonding", subtopics: ["VSEPR", "Hybridization", "MOT"] },
+            { id: "chem_6", subject: "CHEMISTRY", title: "6. Solutions", subtopics: ["Raoult's Law", "Colligative Properties"] },
+            { id: "chem_7", subject: "CHEMISTRY", title: "7. Thermodynamics", subtopics: ["Enthalpy", "Hess's Law", "Gibbs Free Energy"] },
+            { id: "chem_8", subject: "CHEMISTRY", title: "8. Equilibrium", subtopics: ["Chemical Equilibrium", "pH & Buffers", "Ksp"] },
+            { id: "chem_9", subject: "CHEMISTRY", title: "9. Electrochemistry", subtopics: ["Nernst Equation", "Conductance", "Electrolysis"] },
+            { id: "chem_10", subject: "CHEMISTRY", title: "10. Chemical Kinetics", subtopics: ["Rate Law", "Integrated Rate", "Arrhenius Equation"] },
+            { id: "chem_11", subject: "CHEMISTRY", title: "11. IUPAC Nomenclature", subtopics: ["Alkanes/Alkenes", "Functional Groups"] },
+            { id: "chem_12", subject: "CHEMISTRY", title: "12. Isomerism", subtopics: ["Structural", "Geometrical", "Optical"] },
+            { id: "chem_13", subject: "CHEMISTRY", title: "13. GOC", subtopics: ["Inductive/Resonance", "Hyperconjugation", "Stability"] },
+            { id: "chem_14", subject: "CHEMISTRY", title: "14. Hydrocarbons", subtopics: ["Alkanes", "Alkenes", "Alkynes", "Benzene"] },
+            { id: "chem_15", subject: "CHEMISTRY", title: "15. Haloalkanes and Haloarenes", subtopics: ["SN1/SN2", "Elimination"] },
+            { id: "chem_16", subject: "CHEMISTRY", title: "16. Alcohols, Phenols and Ethers", subtopics: ["Alcohols", "Phenols", "Ethers"] },
+            { id: "chem_17", subject: "CHEMISTRY", title: "17. Aldehydes, Ketones and Carboxylic Acids", subtopics: ["Addition", "Aldol/Cannizzaro", "Acids"] },
+            { id: "chem_18", subject: "CHEMISTRY", title: "18. Amines", subtopics: ["Basicity", "Name Reactions", "Diazonium"] },
+            { id: "chem_19", subject: "CHEMISTRY", title: "19. Biomolecules", subtopics: ["Glucose", "Proteins", "Nucleic Acids"] },
+            { id: "chem_20", subject: "CHEMISTRY", title: "20. Purification & Analysis", subtopics: ["Purification", "Qualitative Tests"] },
+            { id: "chem_21", subject: "CHEMISTRY", title: "21. Coordination Compounds", subtopics: ["IUPAC", "VBT", "CFT"] },
+            { id: "chem_22", subject: "CHEMISTRY", title: "22. P-block (Group 13 & 14)", subtopics: ["Boron Family", "Carbon Family"] },
+            { id: "chem_23", subject: "CHEMISTRY", title: "23. P-block (Group 15 to 18)", subtopics: ["Nitrogen to Xenon Compounds"] },
+            { id: "chem_24", subject: "CHEMISTRY", title: "24. D and F-block Elements", subtopics: ["Transition Metals", "Lanthanides"] },
+            { id: "chem_25", subject: "CHEMISTRY", title: "25. Practical Chemistry", subtopics: ["Salt Analysis", "Titrations"] }
+        ];
+
+        let appData = { progress: {}, dppBooks: [], dailyLogs: [], timetable: {}, streak: 1 };
+        let currentActiveSubjectFilter = 'ALL';
+        let activeQuizState = null;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadFromStorage();
+            renderSyllabus();
+            renderDPPBooks();
+            renderDailyLogs();
+            renderTimetableDisplay();
+            updateSmartDashboard();
+            checkSundayLock();
+            startCountdown();
+        });
+
+        function saveToStorage(showToast = false) {
+            localStorage.setItem('NEET_2027_MASTERY_OS', JSON.stringify(appData));
+            if (showToast) displayToast("Data Auto-Saved Successfully!");
+            updateSmartDashboard();
+        }
+
+        function loadFromStorage() {
+            const stored = localStorage.getItem('NEET_2027_MASTERY_OS');
+            if (stored) { try { appData = JSON.parse(stored); } catch(e) {} }
+        }
+
+        function exportJSONBackup() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData, null, 2));
+            const dl = document.createElement('a');
+            dl.setAttribute("href", dataStr);
+            dl.setAttribute("download", `neet_backup_${new Date().toISOString().split('T')[0]}.json`);
+            dl.click();
+            dl.remove();
+        }
+
+        function importJSONBackup(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                appData = JSON.parse(e.target.result);
+                saveToStorage(true);
+                location.reload();
+            };
+            reader.readAsText(file);
+        }
+
+        function displayToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3000);
+        }
+
+        function switchTab(tabId) {
+            ['dashboard', 'timetable', 'tracker', 'dpp', 'viva', 'daily', 'break'].forEach(t => {
+                document.getElementById(`view-${t}`).classList.add('hidden');
+                document.getElementById(`tab-btn-${t}`).classList.remove('active');
+            });
+            document.getElementById(`view-${tabId}`).classList.remove('hidden');
+            document.getElementById(`tab-btn-${tabId}`).classList.add('active');
+        }
+
+        // Sunday Lock Logic
+        let isSundayUnlocked = false;
         function checkSundayLock() {
-            const today = new Date().getDay(); // 0 is Sunday
+            const today = new Date().getDay();
             const pill = document.getElementById('lock-status-pill');
             const icon = document.getElementById('lock-icon');
             const text = document.getElementById('lock-text');
-
             if (today === 0 || isSundayUnlocked) {
-                // UNLOCKED ON SUNDAY
                 pill.className = "px-4 py-2 rounded-xl text-xs font-bold flex items-center space-x-2 border bg-emerald-500/20 text-emerald-400 border-emerald-500/30";
                 icon.className = "fa-solid fa-lock-open";
-                text.innerText = "UNLOCKED (Sunday Edit Mode Active)";
+                text.innerText = "UNLOCKED (Sunday Edit Mode)";
                 enableTimetableInputs(true);
             } else {
-                // LOCKED MON - SAT
                 pill.className = "px-4 py-2 rounded-xl text-xs font-bold flex items-center space-x-2 border bg-rose-500/20 text-rose-400 border-rose-500/30";
                 icon.className = "fa-solid fa-lock";
                 text.innerText = "LOCKED (Unlocks on Sunday)";
@@ -209,21 +503,17 @@
         }
 
         function enableTimetableInputs(enable) {
-            document.getElementById('time-lib-entry').disabled = !enable;
-            document.getElementById('time-lib-exit').disabled = !enable;
-            document.getElementById('time-commute-mins').disabled = !enable;
-            document.getElementById('weekly-lecture-plan').disabled = !enable;
-            document.getElementById('btn-save-timetable').disabled = !enable;
+            ['time-lib-entry', 'time-lib-exit', 'time-commute-mins', 'weekly-lecture-plan', 'btn-save-timetable'].forEach(id => {
+                document.getElementById(id).disabled = !enable;
+            });
+        }
 
-            if (!enable) {
-                document.getElementById('btn-save-timetable').classList.add('opacity-50', 'cursor-not-allowed');
-            } else {
-                document.getElementById('btn-save-timetable').classList.remove('opacity-50', 'cursor-not-allowed');
-            }
+        function emergencyUnlock() {
+            const pwd = prompt("Enter Emergency PIN (2027):");
+            if (pwd === "2027") { isSundayUnlocked = true; checkSundayLock(); alert("Unlocked!"); }
         }
 
         function saveTimetable() {
-            if (!appData.timetable) appData.timetable = {};
             appData.timetable = {
                 entry: document.getElementById('time-lib-entry').value,
                 exit: document.getElementById('time-lib-exit').value,
@@ -231,39 +521,223 @@
                 plan: document.getElementById('weekly-lecture-plan').value
             };
             saveToStorage(true);
-            renderTimetableDisplay();
-            displayToast("Weekly Schedule Locked Successfully!");
+            displayToast("Timetable Locked Successfully!");
         }
 
         function renderTimetableDisplay() {
             if (appData.timetable) {
-                const t = appData.timetable;
-                document.getElementById('disp-lib-hours').innerText = (t.entry && t.exit) ? `${t.entry} to ${t.exit}` : "Not Set";
-                document.getElementById('disp-commute').innerText = t.commute ? `${t.commute} Mins` : "0 Mins";
-                document.getElementById('disp-weekly-plan').innerText = t.plan || "No weekly targets logged yet.";
+                document.getElementById('time-lib-entry').value = appData.timetable.entry || '';
+                document.getElementById('time-lib-exit').value = appData.timetable.exit || '';
+                document.getElementById('time-commute-mins').value = appData.timetable.commute || '';
+                document.getElementById('weekly-lecture-plan').value = appData.timetable.plan || '';
+            }
+        }
+
+        // Dashboard & Velocity
+        const TARGET_EXAM_DATE = new Date('May 2, 2027 00:00:00').getTime();
+        function updateSmartDashboard() {
+            const now = new Date().getTime();
+            const diffMs = TARGET_EXAM_DATE - now;
+            if (diffMs > 0) {
+                const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+                document.getElementById('dash-days-left').innerText = `${days} Days Left`;
+                document.getElementById('header-countdown').innerText = `Target: NEET May 2027 | ${days} Days`;
+
+                let totalSubtopics = 0, completed = 0;
+                MASTER_SYLLABUS.forEach(ch => {
+                    totalSubtopics += ch.subtopics.length;
+                    ch.subtopics.forEach((s, idx) => {
+                        if (appData.progress[`${ch.id}_${idx}`]?.prac) completed++;
+                    });
+                });
+                const rem = totalSubtopics - completed;
+                document.getElementById('dash-req-speed').innerText = `${(rem / Math.max(1, days)).toFixed(2)} /day`;
+                document.getElementById('dash-actual-speed').innerText = `${(completed / Math.max(1, appData.dailyLogs.length)).toFixed(2)} /day`;
                 
-                document.getElementById('time-lib-entry').value = t.entry || '';
-                document.getElementById('time-lib-exit').value = t.exit || '';
-                document.getElementById('time-commute-mins').value = t.commute || '';
-                document.getElementById('weekly-lecture-plan').value = t.plan || '';
+                // Subject %
+                ['ZOOLOGY', 'BOTANY', 'PHYSICS', 'CHEMISTRY'].forEach(sub => {
+                    const subChs = MASTER_SYLLABUS.filter(c => c.subject === sub);
+                    let subTot = 0, subComp = 0;
+                    subChs.forEach(c => {
+                        subTot += c.subtopics.length;
+                        c.subtopics.forEach((_, i) => { if(appData.progress[`${c.id}_${i}`]?.prac) subComp++; });
+                    });
+                    const pc = Math.round((subComp / subTot) * 100) || 0;
+                    const key = sub === 'ZOOLOGY' ? 'zoo' : sub === 'BOTANY' ? 'bot' : sub === 'PHYSICS' ? 'phy' : 'chem';
+                    document.getElementById(`dash-${key}-pc`).innerText = `${pc}%`;
+                    document.getElementById(`dash-${key}-bar`).style.width = `${pc}%`;
+                });
             }
         }
 
-        function emergencyUnlock() {
-            const pwd = prompt("Enter Emergency Unlock Password (Default: 2027):");
-            if (pwd === "2027") {
-                isSundayUnlocked = true;
-                checkSundayLock();
-                alert("Emergency Unlock Granted for this session!");
-            } else if (pwd !== null) {
-                alert("Incorrect PIN!");
+        // Syllabus & Quiz Gate
+        function filterSubject(sub) {
+            currentActiveSubjectFilter = sub;
+            document.querySelectorAll('.subject-filter-btn').forEach(b => b.className = "subject-filter-btn px-3 py-1.5 rounded-lg bg-gray-800 text-gray-400");
+            event.target.className = "subject-filter-btn px-3 py-1.5 rounded-lg bg-brand-600 text-white";
+            renderSyllabus();
+        }
+
+        function renderSyllabus() {
+            const container = document.getElementById('syllabus-accordion-container');
+            const q = document.getElementById('search-input').value.toLowerCase();
+            container.innerHTML = '';
+            MASTER_SYLLABUS.filter(ch => (currentActiveSubjectFilter === 'ALL' || ch.subject === currentActiveSubjectFilter) && ch.title.toLowerCase().includes(q)).forEach(ch => {
+                const card = document.createElement('div');
+                card.className = "glass-panel rounded-2xl border border-gray-800 overflow-hidden";
+                card.innerHTML = `
+                    <div onclick="toggleAccordion('${ch.id}')" class="p-4 cursor-pointer flex items-center justify-between hover:bg-gray-800/40">
+                        <span class="text-xs font-bold px-2.5 py-1 rounded-lg bg-gray-900 text-brand-400">${ch.subject}</span>
+                        <h3 class="text-sm font-bold text-white">${ch.title}</h3>
+                        <i id="icon-${ch.id}" class="fa-solid fa-chevron-down text-gray-500 text-xs"></i>
+                    </div>
+                    <div id="body-${ch.id}" class="hidden border-t border-gray-800 p-4 bg-black/20 space-y-3">
+                        ${ch.subtopics.map((sub, sIdx) => {
+                            const key = `${ch.id}_${sIdx}`;
+                            const st = appData.progress[key] || {};
+                            return `
+                                <div class="p-3 bg-gray-900 rounded-xl flex items-center justify-between text-xs">
+                                    <span>${sub}</span>
+                                    <div class="flex gap-2">
+                                        <button onclick="toggleCheckbox('${ch.id}', ${sIdx}, 'lec')" class="px-2 py-1 rounded ${st.lec ? 'bg-emerald-600 text-white' : 'bg-gray-800 text-gray-500'}">Lec</button>
+                                        <button onclick="triggerQuizGate('${ch.id}', ${sIdx}, 'prac', '${sub}')" class="px-2 py-1 rounded ${st.prac ? 'bg-indigo-600 text-white' : 'bg-gray-800 text-gray-500'}">Prac Gate</button>
+                                    </div>
+                                </div>`;
+                        }).join('')}
+                    </div>`;
+                container.appendChild(card);
+            });
+        }
+
+        function toggleAccordion(id) {
+            document.getElementById(`body-${id}`).classList.toggle('hidden');
+        }
+
+        function toggleCheckbox(chId, sIdx, stage) {
+            const k = `${chId}_${sIdx}`;
+            if (!appData.progress[k]) appData.progress[k] = {};
+            appData.progress[k][stage] = !appData.progress[k][stage];
+            saveToStorage(true);
+            renderSyllabus();
+        }
+
+        // Quiz Gate
+        function triggerQuizGate(chId, sIdx, stageKey, subTitle) {
+            const key = `${chId}_${sIdx}`;
+            if (appData.progress[key]?.[stageKey]) {
+                if (confirm("Reset completion?")) { appData.progress[key][stageKey] = false; saveToStorage(true); renderSyllabus(); }
+                return;
+            }
+            activeQuizState = { chId, sIdx, stageKey, currentQIndex: 0, score: 0, questions: [
+                { q: `Core principle of ${subTitle}?`, opts: ["Option A", "Option B", "Option C", "Option D"], ans: 0 },
+                { q: `Assertion/Reason check for ${subTitle}`, opts: ["True", "False", "Partially True", "None"], ans: 0 },
+                { q: `Standard condition effect on ${subTitle}`, opts: ["Increases", "Decreases", "No effect", "Constant"], ans: 0 },
+                { q: `Sequence for ${subTitle}`, opts: ["Step 1->2", "Step 2->1", "Random", "None"], ans: 0 },
+                { q: `Yield rate in ${subTitle}`, opts: ["High", "Low", "Equilibrium", "Zero"], ans: 2 }
+            ]};
+            document.getElementById('quiz-modal').classList.remove('hidden');
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            const q = activeQuizState.questions[activeQuizState.currentQIndex];
+            document.getElementById('quiz-step-counter').innerText = `Question ${activeQuizState.currentQIndex + 1} of 5`;
+            document.getElementById('quiz-question-container').innerHTML = `
+                <p class="text-xs font-semibold text-white">${q.q}</p>
+                <div class="space-y-2">${q.opts.map((o, i) => `<label class="block p-2 bg-gray-900 rounded cursor-pointer text-xs"><input type="radio" name="q" value="${i}"> ${o}</label>`).join('')}</div>`;
+        }
+
+        function submitQuizAnswer() {
+            const sel = document.querySelector('input[name="q"]:checked');
+            if (!sel) return alert("Select answer!");
+            if (parseInt(sel.value) === activeQuizState.questions[activeQuizState.currentQIndex].ans) activeQuizState.score++;
+            activeQuizState.currentQIndex++;
+            if (activeQuizState.currentQIndex < 5) renderQuizQuestion();
+            else {
+                if (activeQuizState.score >= 4) {
+                    const k = `${activeQuizState.chId}_${activeQuizState.sIdx}`;
+                    if (!appData.progress[k]) appData.progress[k] = {};
+                    appData.progress[k][activeQuizState.stageKey] = true;
+                    saveToStorage(true); renderSyllabus(); closeQuizModal(); alert("Passed!");
+                } else { closeQuizModal(); alert("Failed! Score 80%+ required."); }
             }
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
-            checkSundayLock();
-            renderTimetableDisplay();
-        });
+        function closeQuizModal() { document.getElementById('quiz-modal').classList.add('hidden'); }
+
+        // DPP Manager
+        function addDPPBook() {
+            const name = document.getElementById('dpp-book-name').value;
+            const total = parseInt(document.getElementById('dpp-total-sheets').value);
+            const solved = parseInt(document.getElementById('dpp-solved-sheets').value) || 0;
+            if (!name || !total) return;
+            appData.dppBooks.push({ id: Date.now(), name, total, solved });
+            saveToStorage(true); renderDPPBooks();
+        }
+
+        function renderDPPBooks() {
+            document.getElementById('dpp-books-list').innerHTML = appData.dppBooks.map(b => `
+                <div class="glass-panel p-4 rounded-2xl border border-gray-800 space-y-2 text-xs">
+                    <h4 class="font-bold text-white">${b.name}</h4>
+                    <p class="text-gray-400">Solved: ${b.solved} / ${b.total}</p>
+                </div>`).join('');
+        }
+
+        // Daily Logs
+        function addDailyLog() {
+            appData.dailyLogs.unshift({
+                topic: document.getElementById('daily-topic').value,
+                hours: document.getElementById('daily-hours').value,
+                qs: document.getElementById('daily-questions').value,
+                date: new Date().toLocaleDateString()
+            });
+            saveToStorage(true); renderDailyLogs();
+        }
+
+        function renderDailyLogs() {
+            document.getElementById('daily-logs-list').innerHTML = appData.dailyLogs.map(l => `
+                <div class="p-3 bg-gray-900 rounded-xl text-xs space-y-1"><span class="font-bold text-white">${l.topic}</span><p class="text-gray-400">${l.hours} hrs | ${l.qs} Qs</p></div>`).join('');
+        }
+
+        // Break Timer
+        let breakInterval = null;
+        function startBreakTimer(mins) {
+            let s = mins * 60;
+            clearInterval(breakInterval);
+            breakInterval = setInterval(() => {
+                s--;
+                const m = Math.floor(s / 60), sec = s % 60;
+                document.getElementById('break-timer-display').innerText = `${m}:${sec < 10 ? '0':''}${sec}`;
+                if (s <= 0) clearInterval(breakInterval);
+            }, 1000);
+        }
+        function resetBreakTimer() { clearInterval(breakInterval); document.getElementById('break-timer-display').innerText = "30:00"; }
+
+        // Webcam Viva
+        let stream = null;
+        async function startVivaSession() {
+            stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            document.getElementById('viva-webcam').srcObject = stream;
+            document.getElementById('viva-cam-placeholder').classList.add('hidden');
+            document.getElementById('btn-start-viva').classList.add('hidden');
+            document.getElementById('btn-stop-viva').classList.remove('hidden');
+            document.getElementById('viva-dialog-box').classList.remove('hidden');
+            document.getElementById('viva-question-text').innerText = `"Explain the core mechanism of the topic you last studied."`;
+        }
+        function stopVivaSession() {
+            stream?.getTracks().forEach(t => t.stop());
+            document.getElementById('viva-cam-placeholder').classList.remove('hidden');
+            document.getElementById('btn-start-viva').classList.remove('hidden');
+            document.getElementById('btn-stop-viva').classList.add('hidden');
+            document.getElementById('viva-dialog-box').classList.add('hidden');
+        }
+
+        function startCountdown() {
+            setInterval(() => {
+                const diff = TARGET_EXAM_DATE - new Date().getTime();
+                if (diff > 0) document.getElementById('dash-days-left').innerText = `${Math.floor(diff / (1000*60*60*24))} Days Left`;
+            }, 1000);
+        }
     </script>
 </body>
 </html>

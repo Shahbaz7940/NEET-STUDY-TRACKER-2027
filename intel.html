@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEET 2027 Dropper Ultimate Mastery OS</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: { 50: '#eef2ff', 100: '#e0e7ff', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 900: '#312e81' },
+            darkbg: '#0b0f19',
+            cardbg: '#111827',
+            borderbg: '#1f2937'
+          }
+        }
+      }
+    }
+  </script>
+  <!-- FontAwesome & Lucide Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-resources/1.0.0/font-awesome.min.css">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <style>
+    @keyframes flash-siren {
+      0%, 100% { background-color: rgba(220, 38, 38, 0.25); border-color: #ef4444; }
+      50% { background-color: rgba(185, 28, 28, 0.7); border-color: #f87171; }
+    }
+    .siren-active {
+      animation: flash-siren 0.8s infinite;
+    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0b0f19; }
+    ::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #4b5563; }
+  </style>
+</head>
+<body class="bg-[#0b0f19] text-gray-100 font-sans min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
+
+  <!-- TOP NAV BAR -->
+  <header class="bg-slate-900/90 backdrop-blur-md border-b border-gray-800 sticky top-0 z-40 px-4 py-3 flex flex-wrap justify-between items-center gap-3">
+    <div class="flex items-center space-x-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-indigo-500/30">
+        N27
+      </div>
+      <div>
+        <h1 class="text-lg font-bold bg-gradient-to-r from-indigo-400 via-purple-300 to-pink-400 bg-clip-text text-transparent">
+          NEET 2027 Dropper Mastery OS
+        </h1>
+        <p class="text-xs text-gray-400 flex items-center gap-2">
+          <span>Target: AIIMS New Delhi</span> • 
+          <span id="overall-progress-text" class="text-emerald-400 font-semibold">0% Overall</span>
+        </p>
+      </div>
+    </div>
+
+    <!-- Quick Action Controls -->
+    <div class="flex items-center space-x-2 flex-wrap gap-y-2">
+      <!-- Backup Controls -->
+      <button onclick="exportDataJSON()" class="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-xs font-medium text-gray-200 rounded-lg border border-gray-700 flex items-center gap-1.5 transition">
+        <i class="ri-download-2-line text-indigo-400"></i> Export Backup
+      </button>
+      <label class="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-xs font-medium text-gray-200 rounded-lg border border-gray-700 flex items-center gap-1.5 cursor-pointer transition">
+        <i class="ri-upload-2-line text-emerald-400"></i> Restore Data
+        <input type="file" id="importFile" class="hidden" accept=".json" onchange="importDataJSON(event)">
+      </label>
+
+      <!-- Siren Toggle Button -->
+      <button id="sirenBtn" onclick="toggleSirenAlarm()" class="px-3 py-1.5 bg-red-950/80 hover:bg-red-900/80 text-red-300 text-xs font-medium rounded-lg border border-red-800/80 flex items-center gap-1.5 transition">
+        <i class="ri-alarm-warning-line text-red-400 animate-pulse"></i> Backlog Siren
+      </button>
+
+      <!-- Streak Badge -->
+      <div class="px-3 py-1.5 bg-amber-950/40 text-amber-300 border border-amber-700/50 rounded-lg text-xs font-semibold flex items-center gap-1.5">
+        <i class="ri-fire-fill text-amber-500"></i> <span id="streakCount">0</span> Day Streak
+      </div>
+    </div>
+  </header>
+
+  <!-- SIREN ALERT BANNER (HIDDEN BY DEFAULT) -->
+  <div id="sirenBanner" class="hidden siren-active px-4 py-2 border-y text-red-100 flex items-center justify-between font-bold text-xs">
+    <div class="flex items-center gap-2">
+      <i class="ri-alarm-warning-fill text-xl text-red-400 animate-spin"></i>
+      <span>CRITICAL BACKLOG WARNING: Pending lectures exceeding safety threshold! Clear backlogs immediately!</span>
+    </div>
+    <button onclick="toggleSirenAlarm()" class="px-2 py-0.5 bg-red-900 hover:bg-red-800 rounded text-xs">Mute Siren</button>
+  </div>
+
+  <!-- MAIN NAVIGATION TABS -->
+  <nav class="bg-gray-900/60 border-b border-gray-800/80 px-4 flex gap-1 overflow-x-auto text-sm font-medium scrollbar-none">
+    <button onclick="switchTab('curriculum')" id="tab-curriculum" class="tab-btn px-4 py-3 text-indigo-400 border-b-2 border-indigo-500 flex items-center gap-2 whitespace-nowrap">
+      <i class="ri-book-open-line"></i> 87 Chapters Syllabus
+    </button>
+    <button onclick="switchTab('dpp')" id="tab-dpp" class="tab-btn px-4 py-3 text-gray-400 border-b-2 border-transparent hover:text-gray-200 flex items-center gap-2 whitespace-nowrap">
+      <i class="ri-file-list-3-line"></i> PW DPP Tracker
+    </button>
+    <button onclick="switchTab('aaj')" id="tab-aaj" class="tab-btn px-4 py-3 text-gray-400 border-b-2 border-transparent hover:text-gray-200 flex items-center gap-2 whitespace-nowrap">
+      <i class="ri-edit-box-line"></i> Aaj Kya Padha
+    </button>
+    <button onclick="switchTab('timetable')" id="tab-timetable" class="tab-btn px-4 py-3 text-gray-400 border-b-2 border-transparent hover:text-gray-200 flex items-center gap-2 whitespace-nowrap">
+      <i class="ri-calendar-todo-line"></i> PW Timetable & Routine
+    </button>
+    <button onclick="switchTab('viva')" id="tab-viva" class="tab-btn px-4 py-3 text-gray-400 border-b-2 border-transparent hover:text-gray-200 flex items-center gap-2 whitespace-nowrap">
+      <i class="ri-webcam-line text-pink-400"></i> AI Proctored Viva Engine
+    </button>
+    <button onclick="switchTab('break')" id="tab-break" class="tab-btn px-4 py-3 text-gray-400 border-b-2 border-transparent hover:text-gray-200 flex items-center gap-2 whitespace-nowrap">
+      <i class="ri-film-line text-amber-400"></i> Guilt-Free Horror Break
+    </button>
+  </nav>
+
+  <!-- CONTAINER FOR TAB CONTENTS -->
+  <main class="flex-1 p-4 md:p-6 max-w-7xl w-full mx-auto space-y-6">
+
+    <!-- ==================== TAB 1: CURRICULUM SYLLABUS ==================== -->
+    <section id="sec-curriculum" class="tab-content space-y-6">
+      <!-- Subject Tabs & Metrics -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <button onclick="filterSubject('Zoology')" id="subj-btn-Zoology" class="subj-filter-btn p-3 bg-gray-800/90 border border-indigo-500/50 rounded-xl text-left transition hover:border-indigo-400">
+          <p class="text-xs text-indigo-400 font-semibold uppercase">Zoology (16 Ch)</p>
+          <p id="zoology-score" class="text-lg font-extrabold mt-0.5">0%</p>
+          <div class="w-full bg-gray-700 h-1.5 rounded-full mt-2 overflow-hidden">
+            <div id="zoology-bar" class="bg-indigo-500 h-full w-0 transition-all"></div>
+          </div>
+        </button>
+
+        <button onclick="filterSubject('Botany')" id="subj-btn-Botany" class="subj-filter-btn p-3 bg-gray-800/90 border border-gray-700 rounded-xl text-left transition hover:border-emerald-400">
+          <p class="text-xs text-emerald-400 font-semibold uppercase">Botany (15 Ch)</p>
+          <p id="botany-score" class="text-lg font-extrabold mt-0.5">0%</p>
+          <div class="w-full bg-gray-700 h-1.5 rounded-full mt-2 overflow-hidden">
+            <div id="botany-bar" class="bg-emerald-500 h-full w-0 transition-all"></div>
+          </div>
+        </button>
+
+        <button onclick="filterSubject('Physics')" id="subj-btn-Physics" class="subj-filter-btn p-3 bg-gray-800/90 border border-gray-700 rounded-xl text-left transition hover:border-sky-400">
+          <p class="text-xs text-sky-400 font-semibold uppercase">Physics (30 Ch)</p>
+          <p id="physics-score" class="text-lg font-extrabold mt-0.5">0%</p>
+          <div class="w-full bg-gray-700 h-1.5 rounded-full mt-2 overflow-hidden">
+            <div id="physics-bar" class="bg-sky-500 h-full w-0 transition-all"></div>
+          </div>
+        </button>
+
+        <button onclick="filterSubject('Chemistry')" id="subj-btn-Chemistry" class="subj-filter-btn p-3 bg-gray-800/90 border border-gray-700 rounded-xl text-left transition hover:border-amber-400">
+          <p class="text-xs text-amber-400 font-semibold uppercase">Chemistry (25 Ch)</p>
+          <p id="chemistry-score" class="text-lg font-extrabold mt-0.5">0%</p>
+          <div class="w-full bg-gray-700 h-1.5 rounded-full mt-2 overflow-hidden">
+            <div id="chemistry-bar" class="bg-amber-500 h-full w-0 transition-all"></div>
+          </div>
+        </button>
+      </div>
+
+      <!-- Controls & Search -->
+      <div class="flex flex-col sm:flex-row gap-3 items-center justify-between bg-gray-900 p-3 rounded-xl border border-gray-800">
+        <div class="relative w-full sm:w-80">
+          <i class="ri-search-line absolute left-3 top-2.5 text-gray-500"></i>
+          <input type="text" id="chapterSearch" oninput="renderChapters()" placeholder="Search 87 chapters or subtopics..." class="w-full bg-gray-800 border border-gray-700 rounded-lg pl-9 pr-3 py-1.5 text-xs text-gray-200 focus:outline-none focus:border-indigo-500">
+        </div>
+        <div class="flex items-center gap-2 text-xs text-gray-400">
+          <span>Legend:</span>
+          <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-indigo-500"></span>Lec</span>
+          <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-blue-500"></span>Note</span>
+          <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500"></span>NCERT</span>
+          <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-amber-500"></span>Prac</span>
+          <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-purple-500"></span>DPP</span>
+          <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-pink-500"></span>Rev</span>
+        </div>
+      </div>
+
+      <!-- Chapter Accordion Container -->
+      <div id="chapterListContainer" class="space-y-3">
+        <!-- Rendered dynamically via JS -->
+      </div>
+    </section>
+
+
+    <!-- ==================== TAB 2: PW DPP MANAGER ==================== -->
+    <section id="sec-dpp" class="tab-content hidden space-y-6">
+      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 space-y-4">
+        <h2 class="text-base font-bold text-indigo-400 flex items-center gap-2">
+          <i class="ri-file-list-3-fill"></i> PW Daily Practice Problem (DPP) Sheets Logger
+        </h2>
+        
+        <form id="dppForm" onsubmit="addDPPEntry(event)" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
+          <div>
+            <label class="block text-xs text-gray-400 mb-1">Subject</label>
+            <select id="dppSubject" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-2.5 py-2 text-xs text-gray-200 focus:border-indigo-500">
+              <option value="Zoology">Zoology</option>
+              <option value="Botany">Botany</option>
+              <option value="Physics">Physics</option>
+              <option value="Chemistry">Chemistry</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-gray-400 mb-1">Sheet / Chapter Name</label>
+            <input type="text" id="dppSheetName" required placeholder="DPP #04 - Chemical Bonding" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-2.5 py-2 text-xs text-gray-200">
+          </div>
+          <div>
+            <label class="block text-xs text-gray-400 mb-1">Total Solved Qs</label>
+            <input type="number" id="dppTotalQs" required min="1" placeholder="15" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-2.5 py-2 text-xs text-gray-200">
+          </div>
+          <div>
+            <label class="block text-xs text-gray-400 mb-1">Correct Qs</label>
+            <input type="number" id="dppCorrectQs" required min="0" placeholder="13" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-2.5 py-2 text-xs text-gray-200">
+          </div>
+          <div class="flex items-end">
+            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 px-3 rounded-lg text-xs transition">
+              Log PW DPP
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- DPP History & Metrics -->
+      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 space-y-4">
+        <div class="flex justify-between items-center">
+          <h3 class="text-sm font-semibold text-gray-200">Log History & Accuracy Rate</h3>
+          <span id="overallDppAccuracy" class="text-xs bg-indigo-950 text-indigo-300 px-2.5 py-1 rounded-full border border-indigo-800/50">Overall Accuracy: 0%</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-gray-300">
+            <thead class="bg-gray-800/80 text-gray-400 uppercase text-[10px] border-b border-gray-700">
+              <tr>
+                <th class="p-2.5">Date</th>
+                <th class="p-2.5">Subject</th>
+                <th class="p-2.5">Sheet Name</th>
+                <th class="p-2.5">Solved</th>
+                <th class="p-2.5">Correct</th>
+                <th class="p-2.5">Accuracy</th>
+                <th class="p-2.5">Action</th>
+              </tr>
+            </thead>
+            <tbody id="dppTableBody" class="divide-y divide-gray-800">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================== TAB 3: AAJ KYA PADHA ==================== -->
+    <section id="sec-aaj" class="tab-content hidden space-y-6">
+      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 space-y-4">
+        <h2 class="text-base font-bold text-emerald-400 flex items-center gap-2">
+          <i class="ri-edit-box-fill"></i> Daily Learning Log ("Aaj Kya Padha")
+        </h2>
+        <form id="dailyLogForm" onsubmit="saveDailyLog(event)" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs text-gray-400 mb-1">Select Chapter & Subtopic Covered</label>
+              <input type="text" id="dailyLogTopics" required placeholder="e.g. Physics: NLM - Friction & Pseudo force" class="w-full bg-gray-800 border border-gray-700 rounded-lg p-2.5 text-xs text-gray-200">
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 mb-1">Total MCQs Solved Today</label>
+              <input type="number" id="dailyLogMCQs" placeholder="80" class="w-full bg-gray-800 border border-gray-700 rounded-lg p-2.5 text-xs text-gray-200">
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs text-gray-400 mb-1">Key Formulas / Concepts / Mistakes Made</label>
+            <textarea id="dailyLogNotes" rows="3" placeholder="Write key formulas or tricky mistakes from PW DPP to test in AI Viva..." class="w-full bg-gray-800 border border-gray-700 rounded-lg p-2.5 text-xs text-gray-200"></textarea>
+          </div>
+          <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2 px-5 rounded-lg text-xs transition">
+            Save Today's Log
+          </button>
+        </form>
+      </div>
+
+      <!-- Past Logs List -->
+      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 space-y-3">
+        <h3 class="text-sm font-semibold text-gray-200">Previous Daily Summaries</h3>
+        <div id="dailyLogsHistory" class="space-y-2">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================== TAB 4: PW TIMETABLE ==================== -->
+    <section id="sec-timetable" class="tab-content hidden space-y-6">
+      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 space-y-4">
+        <div class="flex justify-between items-center flex-wrap gap-2">
+          <div>
+            <h2 class="text-base font-bold text-sky-400 flex items-center gap-2">
+              <i class="ri-calendar-event-fill"></i> PW Dropper Batch Timetable & Daily Routine
+            </h2>
+            <p class="text-xs text-gray-400">Disciplined schedule customized for Droppers.</p>
+          </div>
+          <button onclick="toggleHolidayMode()" id="holidayBtn" class="px-3 py-1.5 bg-gray-800 border border-gray-700 text-amber-400 rounded-lg text-xs font-semibold hover:bg-gray-700">
+            <i class="ri-contrast-2-line"></i> Holiday/Self-Study Mode: OFF
+          </button>
+        </div>
+
+        <!-- Routine Slots Table -->
+        <div class="space-y-2" id="routineSlotsContainer">
+          <!-- Default Routine Cards -->
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================== TAB 5: AI PROCTORED VIVA ENGINE ==================== -->
+    <section id="sec-viva" class="tab-content hidden space-y-6">
+      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 space-y-4">
+        <div class="border-b border-gray-800 pb-3 flex justify-between items-center flex-wrap gap-2">
+          <div>
+            <h2 class="text-base font-bold text-pink-400 flex items-center gap-2">
+              <i class="ri-webcam-fill"></i> AI Proctored Camera & Voice Examiner Engine
+            </h2>
+            <p class="text-xs text-gray-400">Tests you orally on your daily study log & DPP notes using Browser Speech Engine before completing your task.</p>
+          </div>
+          <span class="px-2.5 py-1 bg-pink-950/60 text-pink-300 text-xs rounded-full border border-pink-800/50 font-medium">Proctored Active</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+          <!-- WebRTC Camera Simulation / Feed Box -->
+          <div class="relative bg-black rounded-xl border border-gray-800 aspect-video flex flex-col items-center justify-center overflow-hidden">
+            <video id="vivaCamVideo" autoplay playsinline muted class="w-full h-full object-cover hidden"></video>
+            <div id="vivaCamPlaceholder" class="text-center p-4">
+              <i class="ri-camera-off-line text-4xl text-gray-600 mb-2"></i>
+              <p class="text-xs text-gray-400 mb-3">Camera is off or non-permissioned.</p>
+              <button onclick="startWebcam()" class="px-3 py-1.5 bg-indigo-600 text-white rounded-lg text-xs font-medium hover:bg-indigo-500">
+                Turn On Camera
+              </button>
+            </div>
+            <div class="absolute top-2 left-2 px-2 py-0.5 bg-red-600/80 text-white text-[10px] font-bold rounded flex items-center gap-1">
+              <span class="w-1.5 h-1.5 bg-white rounded-full animate-ping"></span> AI PROCTOR
+            </div>
+          </div>
+
+          <!-- Viva Controller & Dialogue -->
+          <div class="space-y-4">
+            <div id="vivaStatusBox" class="p-4 bg-gray-800/80 border border-gray-700 rounded-xl space-y-2">
+              <p class="text-xs font-semibold text-pink-400 uppercase tracking-wider">AI Examiner Status</p>
+              <p id="vivaSpeechText" class="text-sm font-medium text-gray-200">
+                "Click 'Start Viva Test' below. I will ask you questions based on your logged formulas and notes!"
+              </p>
+            </div>
+
+            <div class="flex gap-2">
+              <button onclick="startAIViva()" class="flex-1 py-2.5 bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-xl text-xs font-bold hover:opacity-90 transition flex items-center justify-center gap-2">
+                <i class="ri-mic-line"></i> Start Viva Test
+              </button>
+              <button onclick="simulateUserAnswer()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition">
+                Answer Correctly
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================== TAB 6: HORROR MOVIE BREAK TIMER ==================== -->
+    <section id="sec-break" class="tab-content hidden space-y-6">
+      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 space-y-6 text-center">
+        <div>
+          <h2 class="text-lg font-extrabold text-amber-400 flex items-center justify-center gap-2">
+            <i class="ri-film-fill"></i> Guilt-Free Horror Movie & Rest Break
+          </h2>
+          <p class="text-xs text-gray-400 mt-1">Earned rest after intense study sessions. Relax your eyes before the next study sprint!</p>
+        </div>
+
+        <!-- Timer Display -->
+        <div class="py-6 bg-gray-950/80 rounded-2xl border border-gray-800 max-w-md mx-auto">
+          <p id="breakDisplay" class="text-5xl font-mono font-black text-amber-400">15:00</p>
+          <p class="text-xs text-gray-500 mt-1 uppercase tracking-widest">Rest Recovery Countdown</p>
+        </div>
+
+        <div class="flex justify-center gap-3">
+          <button onclick="startBreakTimer(15)" class="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold rounded-lg transition">15 Mins Quick Reset</button>
+          <button onclick="startBreakTimer(45)" class="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold rounded-lg transition">45 Mins Chill Break</button>
+          <button onclick="stopBreakTimer()" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-bold rounded-lg transition">Stop Timer</button>
+        </div>
+
+        <!-- Recommended Horror Movies -->
+        <div class="text-left pt-4 border-t border-gray-800">
+          <h3 class="text-xs font-bold text-gray-300 uppercase tracking-wider mb-3">Recommended Spooky Horror Recs for Breaks</h3>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div class="p-3 bg-gray-800/80 rounded-xl border border-gray-700 text-xs space-y-1">
+              <p class="font-bold text-amber-300">1. Sinister (2012)</p>
+              <p class="text-[11px] text-gray-400">Supernatural Mystery</p>
+            </div>
+            <div class="p-3 bg-gray-800/80 rounded-xl border border-gray-700 text-xs space-y-1">
+              <p class="font-bold text-amber-300">2. The Conjuring</p>
+              <p class="text-[11px] text-gray-400">Haunting / Ed Warren</p>
+            </div>
+            <div class="p-3 bg-gray-800/80 rounded-xl border border-gray-700 text-xs space-y-1">
+              <p class="font-bold text-amber-300">3. Evil Dead Rise</p>
+              <p class="text-[11px] text-gray-400">Gore & Thrill</p>
+            </div>
+            <div class="p-3 bg-gray-800/80 rounded-xl border border-gray-700 text-xs space-y-1">
+              <p class="font-bold text-amber-300">4. Talk to Me</p>
+              <p class="text-[11px] text-gray-400">Possession Thriller</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- JS LOGIC AND SYLLABUS DATA -->
+  <script>
+    // ==========================================
+    // 1. FULL EXHAUSTIVE 87 CHAPTERS SYLLABUS DATA
+    // ==========================================
+    const CHAPTERS_DATA = [
+      // ZOOLOGY (16 Chapters)
+      { id: "zoo_1", subject: "Zoology", title: "1. Structural Organisation in Animals", subtopics: ["Epithelial Tissue", "Connective Tissue", "Muscular Tissue", "Neural Tissue"] },
+      { id: "zoo_2", subject: "Zoology", title: "2. Biomolecules", subtopics: ["Carbohydrates & Lipids", "Proteins & Amino Acids", "Nucleic Acids (DNA/RNA)", "Enzymes & Catalysis"] },
+      { id: "zoo_3", subject: "Zoology", title: "3. Breathing and Exchange of Gases", subtopics: ["Human Respiratory System", "Mechanism of Breathing", "Exchange & Transport of Gases", "Respiratory Volumes & Disorders"] },
+      { id: "zoo_4", subject: "Zoology", title: "4. Body Fluid and Circulation", subtopics: ["Blood Components & Groups", "Human Heart Structure", "Cardiac Cycle & ECG", "Double Circulation & Disorders"] },
+      { id: "zoo_5", subject: "Zoology", title: "5. Excretory Products and Their Elimination", subtopics: ["Human Excretory System", "Urine Formation", "Mechanism of Concentration (Counter-Current)", "Regulation & Kidney Disorders"] },
+      { id: "zoo_6", subject: "Zoology", title: "6. Locomotion and Movement", subtopics: ["Types of Movement & Muscle", "Mechanism of Muscle Contraction", "Skeletal System & Joints", "Disorders of Skeletal System"] },
+      { id: "zoo_7", subject: "Zoology", title: "7. Neural Control and Coordination", subtopics: ["Neuron & Nerve Impulse Generation", "Central Nervous System (Brain)", "Reflex Action & Reflex Arc", "Sense Organs (Eye & Ear)"] },
+      { id: "zoo_8", subject: "Zoology", title: "8. Chemical Coordination and Integration", subtopics: ["Endocrine Glands & Hormones", "Pituitary & Thyroid Glands", "Adrenal, Pancreas & Gonads", "Mechanism of Hormone Action"] },
+      { id: "zoo_9", subject: "Zoology", title: "9. Animal Kingdom", subtopics: ["Non-Chordates (Porifera to Echinodermata)", "Hemichordata & Chordata", "Cyclostomata & Pisces", "Amphibia, Reptilia, Aves & Mammalia"] },
+      { id: "zoo_10", subject: "Zoology", title: "10. Cockroach and Frog", subtopics: ["Morphology of Cockroach", "Anatomy of Cockroach", "Morphology of Frog", "Anatomy & Systems of Frog"] },
+      { id: "zoo_11", subject: "Zoology", title: "11. Human Reproduction", subtopics: ["Male Reproductive System", "Female Reproductive System", "Gametogenesis (Spermatogenesis & Oogenesis)", "Menstrual Cycle, Fertilization & Pregnancy"] },
+      { id: "zoo_12", subject: "Zoology", title: "12. Reproductive Health", subtopics: ["Reproductive Health & Population Explosion", "Contraceptive Methods", "STIs & Infertility", "ART (IVF, ZIFT, GIFT)"] },
+      { id: "zoo_13", subject: "Zoology", title: "13. Evolution", subtopics: ["Origin of Life & Evidences", "Homologous & Analogous Organs", "Adaptive Radiation & Natural Selection", "Hardy-Weinberg Principle & Human Evolution"] },
+      { id: "zoo_14", subject: "Zoology", title: "14. Human Health and Disease", subtopics: ["Common Infectious Diseases", "Immunity (Innate & Acquired)", "AIDS & Cancer", "Drugs & Alcohol Abuse"] },
+      { id: "zoo_15", subject: "Zoology", title: "15. Biotechnology Principles and Processes", subtopics: ["Restriction Enzymes & Ligases", "Cloning Vectors & Recombinant DNA", "Processes of rDNA Technology", "Bioreactors & Downstream Processing"] },
+      { id: "zoo_16", subject: "Zoology", title: "16. Biotechnology and Its Applications", subtopics: ["Biotech in Agriculture (Bt Cotton)", "Biotech in Medicine (Insulin & Gene Therapy)", "RNA Interference (RNAi)", "Transgenic Animals & Ethical Issues"] },
+
+      // BOTANY (15 Chapters)
+      { id: "bot_1", subject: "Botany", title: "1. Cell The Unit of Life", subtopics: ["Prokaryotic Cell Structure", "Endomembrane System (ER, Golgi, Lysosome)", "Mitochondria & Plastids", "Nucleus & Chromosomes"] },
+      { id: "bot_2", subject: "Botany", title: "2. Cell Cycle and Cell Division", subtopics: ["Cell Cycle Stages (G1, S, G2)", "Mitosis Phases & Significance", "Meiosis I and Meiosis II", "Regulation of Cell Cycle"] },
+      { id: "bot_3", subject: "Botany", title: "3. Principle of Inheritance and Variation", subtopics: ["Mendel's Laws of Inheritance", "Non-Mendelian Inheritance (Incomplete/Codominance)", "Sex Determination & Linkage", "Genetic Disorders (Pedigree Analysis)"] },
+      { id: "bot_4", subject: "Botany", title: "4. Molecular Basis of Inheritance", subtopics: ["DNA Structure & Packaging", "DNA Replication Mechanism", "Transcription & Genetic Code", "Translation & Lac Operon"] },
+      { id: "bot_5", subject: "Botany", title: "5. The Living World", subtopics: ["Characteristics of Living Organisms", "Taxonomy & Systematics", "Binomial Nomenclature", "Taxonomical Categories"] },
+      { id: "bot_6", subject: "Botany", title: "6. Biological Classification", subtopics: ["Monera & Archaebacteria", "Protista (Chrysophytes, Dinoflagellates)", "Fungi Classes & Reproduction", "Viruses, Viroids & Lichens"] },
+      { id: "bot_7", subject: "Botany", title: "7. Microbes in Human Welfare", subtopics: ["Microbes in Household Products", "Microbes in Sewage Treatment", "Biogas Production", "Biocontrol Agents & Biofertilizers"] },
+      { id: "bot_8", subject: "Botany", title: "8. Anatomy of Flowering Plants", subtopics: ["Meristems & Permanent Tissues", "Vascular Bundles & Tissue System", "Anatomy of Dicot & Monocot Root/Stem", "Secondary Growth in Dicot Stems"] },
+      { id: "bot_9", subject: "Botany", title: "9. Sexual Reproduction in Flowering Plants", subtopics: ["Microsporogenesis & Pollen Grain", "Megasporogenesis & Embryo Sac", "Pollination Mechanisms & Agents", "Double Fertilization & Seed Formation"] },
+      { id: "bot_10", subject: "Botany", title: "10. Respiration in Plants", subtopics: ["Glycolysis Cycle", "Fermentation Pathway", "TCA Cycle (Krebs Cycle)", "Electron Transport System (ETS) & RQ"] },
+      { id: "bot_11", subject: "Botany", title: "11. Photosynthesis in Higher Plants", subtopics: ["Light Reaction & Photosystems", "Cyclic & Non-Cyclic Photophosphorylation", "Calvin Cycle (C3 Pathway)", "C4 Pathway & Photorespiration"] },
+      { id: "bot_12", subject: "Botany", title: "12. Plant Growth and Development", subtopics: ["Phases of Growth & Differentiation", "Auxins & Gibberellins", "Cytokinins, Ethylene & ABA", "Photoperiodism & Vernalization"] },
+      { id: "bot_13", subject: "Botany", title: "13. Organisms and Populations", subtopics: ["Organism & Environment Adaptations", "Population Attributes & Growth Models", "Population Interactions (Mutualism, Parasitism)", "Predation & Competition"] },
+      { id: "bot_14", subject: "Botany", title: "14. Ecosystem", subtopics: ["Ecosystem Structure & Productivity", "Decomposition Process", "Energy Flow & Ecological Pyramids", "Ecological Succession"] },
+      { id: "bot_15", subject: "Botany", title: "15. Biodiversity and Conservation", subtopics: ["Patterns of Biodiversity", "Loss of Biodiversity", "In-situ & Ex-situ Conservation", "Hotspots & Protected Areas"] },
+
+      // PHYSICS (30 Chapters)
+      { id: "phy_1", subject: "Physics", title: "1. Units and Measurements", subtopics: ["SI Units & Conversions", "Dimensional Analysis", "Errors in Measurement", "Significant Figures"] },
+      { id: "phy_2", subject: "Physics", title: "2. Mathematical Tools", subtopics: ["Vectors Addition & Dot Product", "Vector Cross Product", "Basic Calculus (Differentiation)", "Basic Calculus (Integration)"] },
+      { id: "phy_3", subject: "Physics", title: "3. Motion in a Straight Line", subtopics: ["Distance, Displacement, Velocity", "Equations of Motion", "Motion Under Gravity", "Relative Velocity 1D"] },
+      { id: "phy_4", subject: "Physics", title: "4. Motion in a Plane", subtopics: ["Projectile Motion", "Horizontal Projectile", "Uniform Circular Motion", "Relative Velocity 2D"] },
+      { id: "phy_5", subject: "Physics", title: "5. Newton's Laws of Motion", subtopics: ["First & Second Law Applications", "Tension & Pulley Systems", "Static & Kinetic Friction", "Centripetal Force"] },
+      { id: "phy_6", subject: "Physics", title: "6. Work Energy and Power", subtopics: ["Work Done by Constant/Variable Force", "Work-Energy Theorem", "Potential Energy & Conservation", "Elastic & Inelastic Collisions"] },
+      { id: "phy_7", subject: "Physics", title: "7. Centre of Mass and System of Particles", subtopics: ["Centre of Mass of Discrete Systems", "Centre of Mass of Continuous Bodies", "Motion of Centre of Mass", "Linear Momentum Conservation"] },
+      { id: "phy_8", subject: "Physics", title: "8. Rotation Motion", subtopics: ["Torque & Angular Momentum", "Moment of Inertia Theorems", "Pure Rolling Motion", "Rotational Dynamics Equations"] },
+      { id: "phy_9", subject: "Physics", title: "9. Gravitation", subtopics: ["Universal Law & Acceleration 'g'", "Variation of 'g' with Altitude/Depth", "Gravitational Potential & Energy", "Escape & Orbital Velocity"] },
+      { id: "phy_10", subject: "Physics", title: "10. Mechanical Properties of Solids", subtopics: ["Stress, Strain & Hooke's Law", "Young's, Bulk & Shear Modulus", "Stress-Strain Curve", "Elastic Potential Energy"] },
+      { id: "phy_11", subject: "Physics", title: "11. Mechanical Properties of Fluids", subtopics: ["Pressure & Pascal's Law", "Bernoulli's Principle & Applications", "Viscosity & Terminal Velocity", "Surface Tension & Capillarity"] },
+      { id: "phy_12", subject: "Physics", title: "12. Thermal Properties of Matter", subtopics: ["Thermal Expansion", "Specific Heat & Calorimetry", "Latent Heat & Phase Change", "Conduction, Convection & Radiation"] },
+      { id: "phy_13", subject: "Physics", title: "13. Kinetic Theory of Gases", subtopics: ["Ideal Gas Laws & Equation", "Pressure of Ideal Gas", "Degree of Freedom & Equipartition", "Mean Free Path & Speeds"] },
+      { id: "phy_14", subject: "Physics", title: "14. Thermodynamics", subtopics: ["First Law of Thermodynamics", "Isothermal & Adiabatic Processes", "Isochoric & Isobaric Processes", "Second Law & Heat Engines/Refrigerators"] },
+      { id: "phy_15", subject: "Physics", title: "15. Oscillations", subtopics: ["Simple Harmonic Motion (SHM)", "SHM Velocity, Acceleration & Energy", "Spring-Mass System", "Simple Pendulum"] },
+      { id: "phy_16", subject: "Physics", title: "16. Waves", subtopics: ["Transverse & Longitudinal Waves", "Speed of Waves in String/Air", "Standing Waves & Organ Pipes", "Beats & Doppler Effect"] },
+      { id: "phy_17", subject: "Physics", title: "17. Electric Charge and Fields", subtopics: ["Coulomb's Law & Electrostatic Force", "Electric Field & Dipole", "Electric Flux", "Gauss's Law & Applications"] },
+      { id: "phy_18", subject: "Physics", title: "18. Electrostatic Potential and Capacitance", subtopics: ["Electric Potential & Work Done", "Potential Energy of Charge System", "Capacitor & Dielectrics", "Combination of Capacitors"] },
+      { id: "phy_19", subject: "Physics", title: "19. Current Electricity", subtopics: ["Ohm's Law & Drift Velocity", "Resistivity & Temperature Dependence", "Kirchhoff's Laws & Circuit Analysis", "Wheatstone Bridge & Potentiometer"] },
+      { id: "phy_20", subject: "Physics", title: "20. Moving Charges and Magnetism", subtopics: ["Biot-Savart Law", "Ampere's Circuital Law", "Magnetic Force on Charge & Wire", "Cyclotron & Galvanometer"] },
+      { id: "phy_21", subject: "Physics", title: "21. Magnetism and Matter", subtopics: ["Bar Magnet & Earth's Magnetism", "Dia-, Para- & Ferromagnetism", "Hysteresis Loop", "Magnetic Susceptibility"] },
+      { id: "phy_22", subject: "Physics", title: "22. Electromagnetic Induction", subtopics: ["Faraday's & Lenz's Law", "Motional EMF", "Self & Mutual Inductance", "AC Generator"] },
+      { id: "phy_23", subject: "Physics", title: "23. Alternating Current", subtopics: ["Peak & RMS Values", "LCR Series Circuit & Phasor", "Resonance in AC Circuits", "Transformers & Power Factor"] },
+      { id: "phy_24", subject: "Physics", title: "24. Electromagnetic Waves", subtopics: ["Displacement Current", "EM Wave Properties", "Electromagnetic Spectrum", "Energy Density of EM Waves"] },
+      { id: "phy_25", subject: "Physics", title: "25. Ray Optics and Optical Instruments", subtopics: ["Reflection & Refraction at Spherical Surfaces", "Lens Maker's Formula", "Prism & Dispersion", "Microscope & Telescope"] },
+      { id: "phy_26", subject: "Physics", title: "26. Wave Optics", subtopics: ["Huygens' Principle", "Young's Double Slit Experiment", "Diffraction at Single Slit", "Polarization of Light"] },
+      { id: "phy_27", subject: "Physics", title: "27. Dual Nature of Radiation and Matter", subtopics: ["Photoelectric Effect Observations", "Einstein's Photoelectric Equation", "de Broglie Wavelength", "Davisson-Germer Experiment"] },
+      { id: "phy_28", subject: "Physics", title: "28. Atoms", subtopics: ["Rutherford's Alpha Scattering", "Bohr's Atomic Model", "Hydrogen Energy Levels", "Spectral Series"] },
+      { id: "phy_29", subject: "Physics", title: "29. Nuclei", subtopics: ["Nuclear Density & Binding Energy", "Radioactivity Decay Law", "Alpha, Beta, Gamma Decay", "Nuclear Fission & Fusion"] },
+      { id: "phy_30", subject: "Physics", title: "30. Semiconductor Electronics", subtopics: ["Intrinsic & Extrinsic Semiconductors", "p-n Junction Diode & Rectifier", "Zener Diode", "Logic Gates (AND, OR, NOT, NAND, NOR)"] },
+
+      // CHEMISTRY (25 Chapters)
+      { id: "chem_1", subject: "Chemistry", title: "1. Some Basic Concepts of Chemistry", subtopics: ["Mole Concept & Molar Mass", "Stoichiometry & Limiting Reagent", "Concentration Terms (Molarity/Molality)", "Empirical & Molecular Formula"] },
+      { id: "chem_2", subject: "Chemistry", title: "2. Redox Reactions", subtopics: ["Oxidation Number Rules", "Balancing Redox in Acidic Medium", "Balancing Redox in Basic Medium", "Types of Redox Reactions"] },
+      { id: "chem_3", subject: "Chemistry", title: "3. Structure of Atom", subtopics: ["Bohr's Model & Spectrum", "de Broglie & Heisenberg Uncertainty", "Quantum Numbers & Orbitals", "Electronic Configuration Rules"] },
+      { id: "chem_4", subject: "Chemistry", title: "4. Classification of Elements and Periodicity", subtopics: ["Periodic Table Trends (Radius)", "Ionization Enthalpy", "Electron Gain Enthalpy", "Electronegativity Trends"] },
+      { id: "chem_5", subject: "Chemistry", title: "5. Chemical Bonding and Molecular Structure", subtopics: ["VSEPR Theory & Geometries", "Valence Bond Theory & Hybridization", "Molecular Orbital Theory (MOT)", "Hydrogen Bonding & Dipole Moment"] },
+      { id: "chem_6", subject: "Chemistry", title: "6. Solutions", subtopics: ["Raoult's Law & Ideal Solutions", "Colligative Properties (VP, BP, FP)", "Osmotic Pressure", "van 't Hoff Factor (i)"] },
+      { id: "chem_7", subject: "Chemistry", title: "7. Thermodynamics", subtopics: ["First Law & Internal Energy", "Enthalpy Changes of Reactions", "Hess's Law & Bond Enthalpies", "Second Law & Gibbs Free Energy"] },
+      { id: "chem_8", subject: "Chemistry", title: "8. Equilibrium", subtopics: ["Chemical Equilibrium & Kc/Kp", "Le Chatelier's Principle", "pH Scale & Buffer Solutions", "Solubility Product (Ksp)"] },
+      { id: "chem_9", subject: "Chemistry", title: "9. Electrochemistry", subtopics: ["Nernst Equation & EMF", "Kohlrausch's Law & Conductance", "Faraday's Laws of Electrolysis", "Batteries & Corrosion"] },
+      { id: "chem_10", subject: "Chemistry", title: "10. Chemical Kinetics", subtopics: ["Rate Law & Order of Reaction", "Zero & First Order Kinetics", "Half-Life Calculations", "Arrhenius Equation & Activation Energy"] },
+      { id: "chem_11", subject: "Chemistry", title: "11. IUPAC Nomenclature", subtopics: ["IUPAC Rules for Alkanes/Alkenes", "Functional Groups Priority Order", "Polyfunctional Compounds Naming", "Aromatic Compounds Naming"] },
+      { id: "chem_12", subject: "Chemistry", title: "12. Isomerism", subtopics: ["Structural Isomerism Types", "Geometrical Isomerism (cis/trans, E/Z)", "Optical Isomerism & Chirality", "Enantiomers & Diastereomers"] },
+      { id: "chem_13", subject: "Chemistry", title: "13. GOC (General Organic Chemistry)", subtopics: ["Inductive & Electromeric Effects", "Resonance & Mesomeric Effect", "Hyperconjugation & Aromaticity", "Carbocation, Carbanion & Radical Stability"] },
+      { id: "chem_14", subject: "Chemistry", title: "14. Hydrocarbons", subtopics: ["Alkanes Reactions (Free Radical Halogenation)", "Alkenes Addition (Markovnikov Rule)", "Alkynes Reactions & Acidity", "Aromaticity & Electrophilic Substitution"] },
+      { id: "chem_15", subject: "Chemistry", title: "15. Haloalkanes and Haloarenes", subtopics: ["SN1 and SN2 Reaction Mechanisms", "Elimination Reactions (Saytzeff Rule)", "Reactions of Haloarenes", "Polyhalogen Compounds"] },
+      { id: "chem_16", subject: "Chemistry", title: "16. Alcohols, Phenols and Ether", subtopics: ["Preparation & Reactions of Alcohols", "Esterification & Dehydration", "Phenol Acidity & Reactions (Reimer-Tiemann)", "Ethers Preparation (Williamson Synthesis)"] },
+      { id: "chem_17", subject: "Chemistry", title: "17. Aldehydes, Ketones and Carboxylic Acid", subtopics: ["Nucleophilic Addition Reactions", "Aldol Condensation & Cannizzaro Reaction", "Tollens' & Fehling's Test", "Carboxylic Acid Reactions (HVZ)"] },
+      { id: "chem_18", subject: "Chemistry", title: "18. Amines", subtopics: ["Preparation of Amines", "Basic Strength of Amines", "Hoffmann Bromamide Reaction", "Diazonium Salts & Reactions"] },
+      { id: "chem_19", subject: "Chemistry", title: "19. Biomolecules (Chem)", subtopics: ["Monosaccharides (Glucose Structure)", "Disaccharides & Polysaccharides", "Proteins Structure & Denaturation", "Nucleic Acids & Vitamins"] },
+      { id: "chem_20", subject: "Chemistry", title: "20. Purification and Analysis of Organic Compounds", subtopics: ["Purification Methods (Crystallization/Distillation)", "Chromatography Techniques", "Qualitative Analysis (Lassaigne Test)", "Quantitative Analysis (Kjeldahl/Carius)"] },
+      { id: "chem_21", subject: "Chemistry", title: "21. Coordination Compounds", subtopics: ["Werner's Theory & IUPAC Naming", "Isomerism in Coordination Complexes", "Valence Bond Theory (VBT)", "Crystal Field Theory (CFT)"] },
+      { id: "chem_22", subject: "Chemistry", title: "22. P-block elements (Group 13 and 14)", subtopics: ["Group 13 Trends & Borax/Boric Acid", "Diborane Structure & Bonding", "Group 14 Trends & Allotropes of Carbon", "Silicones & Silicates"] },
+      { id: "chem_23", subject: "Chemistry", title: "23. The p-Group elements (Group 15 to 18)", subtopics: ["Group 15 Compounds (Ammonia, Nitric Acid)", "Group 16 Compounds (Sulfuric Acid)", "Group 17 Halogens & Interhalogens", "Group 18 Noble Gas Compounds (Xenon)"] },
+      { id: "chem_24", subject: "Chemistry", title: "24. The d and f-block elements", subtopics: ["Transition Elements Properties", "Potassium Permanganate (KMnO4)", "Potassium Dichromate (K2Cr2O7)", "Lanthanoids & Actinoids Contraction"] },
+      { id: "chem_25", subject: "Chemistry", title: "25. Practical Chemistry", subtopics: ["Systematic Cation Analysis", "Anion Detection Tests", "Volumetric Analysis Titrations", "Preparation of Lyophilic/Lyophobic Sols"] }
+    ];
+
+    // ==========================================
+    // 2. STATE MANAGEMENT & LOCALSTORAGE
+    // ==========================================
+    let userState = {
+      progress: {}, // { "chId_subidx_stage": true }
+      dpps: [],     // [ { date, subject, sheet, total, correct } ]
+      dailyLogs: [],// [ { date, topics, mcqs, notes } ]
+      streak: 1,
+      isSirenOn: false,
+      isHolidayMode: false
+    };
+
+    const STAGES = [
+      { id: 'lec', label: 'Lecture Done', color: 'indigo' },
+      { id: 'note', label: 'Notes Made', color: 'blue' },
+      { id: 'ncert', label: 'NCERT Read', color: 'emerald' },
+      { id: 'prac', label: 'Practice Qs', color: 'amber' },
+      { id: 'dpp', label: 'PW DPP Solved', color: 'purple' },
+      { id: 'rev', label: 'Revision Done', color: 'pink' }
+    ];
+
+    let currentSubjectFilter = 'Zoology';
+    let breakTimerInterval = null;
+
+    // Load from LocalStorage
+    function loadState() {
+      const saved = localStorage.getItem('neet2027_mastery_os');
+      if (saved) {
+        try {
+          userState = Object.assign(userState, JSON.parse(saved));
+        } catch (e) {
+          console.error("Failed to load saved state", e);
+        }
+      }
+      updateMetrics();
+      renderChapters();
+      renderDPPTable();
+      renderDailyLogs();
+      renderTimetable();
+    }
+
+    function saveState() {
+      localStorage.setItem('neet2027_mastery_os', JSON.stringify(userState));
+      updateMetrics();
+    }
+
+    // ==========================================
+    // 3. CURRICULUM & PROGRESS RENDER
+    // ==========================================
+    function filterSubject(subj) {
+      currentSubjectFilter = subj;
+      document.querySelectorAll('.subj-filter-btn').forEach(btn => {
+        btn.classList.remove('border-indigo-500', 'border-emerald-500', 'border-sky-500', 'border-amber-500');
+        btn.classList.add('border-gray-700');
+      });
+      const activeBtn = document.getElementById(`subj-btn-${subj}`);
+      if (activeBtn) activeBtn.classList.add('border-indigo-500');
+      renderChapters();
+    }
+
+    function renderChapters() {
+      const container = document.getElementById('chapterListContainer');
+      const searchQuery = document.getElementById('chapterSearch').value.toLowerCase();
+      container.innerHTML = '';
+
+      const filtered = CHAPTERS_DATA.filter(ch => {
+        const matchesSubject = ch.subject === currentSubjectFilter;
+        const matchesSearch = ch.title.toLowerCase().includes(searchQuery) || 
+                              ch.subtopics.some(s => s.toLowerCase().includes(searchQuery));
+        return matchesSubject && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="p-8 text-center text-gray-500 text-xs">No chapters matching criteria.</div>`;
+        return;
+      }
+
+      filtered.forEach(ch => {
+        const chProgress = calculateChapterProgress(ch);
+        
+        const card = document.createElement('div');
+        card.className = "bg-gray-900 border border-gray-800 rounded-xl overflow-hidden transition";
+        card.innerHTML = `
+          <!-- Chapter Header -->
+          <div onclick="toggleChapterAccordion('${ch.id}')" class="p-4 cursor-pointer hover:bg-gray-850 flex items-center justify-between flex-wrap gap-2">
+            <div class="flex items-center space-x-3">
+              <i id="icon-${ch.id}" class="ri-add-line text-indigo-400 font-bold"></i>
+              <div>
+                <h3 class="text-sm font-bold text-gray-200">${ch.title}</h3>
+                <p class="text-[11px] text-gray-400">${ch.subtopics.length} Granular Sub-topics</p>
+              </div>
+            </div>
+            <div class="flex items-center space-x-3">
+              <span class="text-xs font-bold text-indigo-400">${chProgress}%</span>
+              <div class="w-24 bg-gray-800 h-2 rounded-full overflow-hidden">
+                <div class="bg-indigo-500 h-full" style="width: ${chProgress}%"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Subtopics Container -->
+          <div id="body-${ch.id}" class="hidden border-t border-gray-800/80 p-4 bg-gray-950/50 space-y-3">
+            ${ch.subtopics.map((sub, sIdx) => {
+              return `
+                <div class="p-3 bg-gray-900 rounded-lg border border-gray-800 space-y-2">
+                  <p class="text-xs font-semibold text-gray-300">${sIdx + 1}. ${sub}</p>
+                  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
+                    ${STAGES.map(st => {
+                      const key = `${ch.id}_${sIdx}_${st.id}`;
+                      const isChecked = !!userState.progress[key];
+                      return `
+                        <button onclick="toggleStage('${key}')" class="px-2 py-1.5 rounded text-[11px] font-medium border flex items-center justify-center gap-1 transition ${isChecked ? 'bg-indigo-950 text-indigo-300 border-indigo-600' : 'bg-gray-800 text-gray-400 border-gray-700 hover:border-gray-600'}">
+                          <i class="${isChecked ? 'ri-checkbox-circle-fill text-indigo-400' : 'ri-checkbox-blank-circle-line'}"></i>
+                          ${st.label}
+                        </button>
+                      `;
+                    }).join('')}
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function toggleChapterAccordion(chId) {
+      const body = document.getElementById(`body-${chId}`);
+      const icon = document.getElementById(`icon-${chId}`);
+      if (body) {
+        body.classList.toggle('hidden');
+        icon.className = body.classList.contains('hidden') ? 'ri-add-line text-indigo-400 font-bold' : 'ri-subtract-line text-indigo-400 font-bold';
+      }
+    }
+
+    function toggleStage(key) {
+      userState.progress[key] = !userState.progress[key];
+      saveState();
+      renderChapters();
+    }
+
+    function calculateChapterProgress(ch) {
+      const totalChecks = ch.subtopics.length * STAGES.length;
+      let count = 0;
+      ch.subtopics.forEach((_, sIdx) => {
+        STAGES.forEach(st => {
+          if (userState.progress[`${ch.id}_${sIdx}_${st.id}`]) count++;
+        });
+      });
+      return totalChecks ? Math.round((count / totalChecks) * 100) : 0;
+    }
+
+    function updateMetrics() {
+      let overallTotal = 0;
+      let overallDone = 0;
+
+      ['Zoology', 'Botany', 'Physics', 'Chemistry'].forEach(subj => {
+        const subjChs = CHAPTERS_DATA.filter(c => c.subject === subj);
+        let subjTotal = 0;
+        let subjDone = 0;
+
+        subjChs.forEach(ch => {
+          subjTotal += ch.subtopics.length * STAGES.length;
+          ch.subtopics.forEach((_, sIdx) => {
+            STAGES.forEach(st => {
+              if (userState.progress[`${ch.id}_${sIdx}_${st.id}`]) subjDone++;
+            });
+          });
+        });
+
+        const pct = subjTotal ? Math.round((subjDone / subjTotal) * 100) : 0;
+        const scoreEl = document.getElementById(`${subj.toLowerCase()}-score`);
+        const barEl = document.getElementById(`${subj.toLowerCase()}-bar`);
+        if (scoreEl) scoreEl.innerText = `${pct}%`;
+        if (barEl) barEl.style.width = `${pct}%`;
+
+        overallTotal += subjTotal;
+        overallDone += subjDone;
+      });
+
+      const overallPct = overallTotal ? Math.round((overallDone / overallTotal) * 100) : 0;
+      const overallText = document.getElementById('overall-progress-text');
+      if (overallText) overallText.innerText = `${overallPct}% Overall`;
+
+      document.getElementById('streakCount').innerText = userState.streak || 1;
+    }
+
+    // ==========================================
+    // 4. PW DPP MANAGER LOGIC
+    // ==========================================
+    function addDPPEntry(e) {
+      e.preventDefault();
+      const subject = document.getElementById('dppSubject').value;
+      const sheet = document.getElementById('dppSheetName').value;
+      const total = parseInt(document.getElementById('dppTotalQs').value);
+      const correct = parseInt(document.getElementById('dppCorrectQs').value);
+
+      userState.dpps.unshift({
+        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+        subject, sheet, total, correct
+      });
+
+      document.getElementById('dppSheetName').value = '';
+      document.getElementById('dppTotalQs').value = '';
+      document.getElementById('dppCorrectQs').value = '';
+
+      saveState();
+      renderDPPTable();
+    }
+
+    function renderDPPTable() {
+      const tbody = document.getElementById('dppTableBody');
+      tbody.innerHTML = '';
+
+      let grandTotal = 0;
+      let grandCorrect = 0;
+
+      if (userState.dpps.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-gray-500">No DPP sheets logged yet.</td></tr>`;
+        document.getElementById('overallDppAccuracy').innerText = `Overall Accuracy: 0%`;
+        return;
+      }
+
+      userState.dpps.forEach((item, idx) => {
+        grandTotal += item.total;
+        grandCorrect += item.correct;
+        const acc = Math.round((item.correct / item.total) * 100);
+
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-gray-850";
+        tr.innerHTML = `
+          <td class="p-2.5 font-mono text-gray-400">${item.date}</td>
+          <td class="p-2.5 font-bold ${getSubjectColorClass(item.subject)}">${item.subject}</td>
+          <td class="p-2.5 font-medium text-gray-200">${item.sheet}</td>
+          <td class="p-2.5">${item.total}</td>
+          <td class="p-2.5 text-emerald-400 font-bold">${item.correct}</td>
+          <td class="p-2.5 font-bold ${acc >= 80 ? 'text-emerald-400' : 'text-amber-400'}">${acc}%</td>
+          <td class="p-2.5">
+            <button onclick="deleteDPP(${idx})" class="text-red-400 hover:text-red-300"><i class="ri-delete-bin-line"></i></button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      const overallAcc = grandTotal ? Math.round((grandCorrect / grandTotal) * 100) : 0;
+      document.getElementById('overallDppAccuracy').innerText = `Overall Accuracy: ${overallAcc}% (${grandCorrect}/${grandTotal} Qs)`;
+    }
+
+    function deleteDPP(idx) {
+      userState.dpps.splice(idx, 1);
+      saveState();
+      renderDPPTable();
+    }
+
+    function getSubjectColorClass(subj) {
+      if (subj === 'Zoology') return 'text-indigo-400';
+      if (subj === 'Botany') return 'text-emerald-400';
+      if (subj === 'Physics') return 'text-sky-400';
+      return 'text-amber-400';
+    }
+
+    // ==========================================
+    // 5. AAJ KYA PADHA LOGIC
+    // ==========================================
+    function saveDailyLog(e) {
+      e.preventDefault();
+      const topics = document.getElementById('dailyLogTopics').value;
+      const mcqs = document.getElementById('dailyLogMCQs').value || 0;
+      const notes = document.getElementById('dailyLogNotes').value;
+
+      userState.dailyLogs.unshift({
+        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+        topics, mcqs, notes
+      });
+
+      document.getElementById('dailyLogTopics').value = '';
+      document.getElementById('dailyLogMCQs').value = '';
+      document.getElementById('dailyLogNotes').value = '';
+
+      saveState();
+      renderDailyLogs();
+    }
+
+    function renderDailyLogs() {
+      const container = document.getElementById('dailyLogsHistory');
+      container.innerHTML = '';
+
+      if (userState.dailyLogs.length === 0) {
+        container.innerHTML = `<p class="text-xs text-gray-500">No daily logs saved yet.</p>`;
+        return;
+      }
+
+      userState.dailyLogs.forEach((log) => {
+        const item = document.createElement('div');
+        item.className = "p-3 bg-gray-950 rounded-xl border border-gray-800 space-y-1 text-xs";
+        item.innerHTML = `
+          <div class="flex justify-between text-gray-400 font-mono">
+            <span>${log.date}</span>
+            <span class="text-emerald-400 font-bold">${log.mcqs} MCQs</span>
+          </div>
+          <p class="font-bold text-gray-200">${log.topics}</p>
+          ${log.notes ? `<p class="text-gray-400 italic bg-gray-900 p-2 rounded border border-gray-800/60">${log.notes}</p>` : ''}
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    // ==========================================
+    // 6. PW TIMETABLE & ROUTINE
+    // ==========================================
+    const DEFAULT_ROUTINE = [
+      { time: "06:00 AM - 07:30 AM", task: "Revision of Yesterday's Notes & Formulas", type: "study" },
+      { time: "08:30 AM - 10:30 AM", task: "PW Live / Recorded Lecture Slot 1 (Physics)", type: "lecture" },
+      { time: "11:00 AM - 01:00 PM", task: "PW Live / Recorded Lecture Slot 2 (Chemistry)", type: "lecture" },
+      { time: "02:00 PM - 04:00 PM", task: "PW Live / Recorded Lecture Slot 3 (Botany/Zoology)", type: "lecture" },
+      { time: "05:00 PM - 07:30 PM", task: "Self Study & PW DPP Solving", type: "practice" },
+      { time: "08:30 PM - 10:30 PM", task: "NCERT Deep Reading & Weak Area Drills", type: "ncert" },
+    ];
+
+    function renderTimetable() {
+      const container = document.getElementById('routineSlotsContainer');
+      container.innerHTML = '';
+
+      DEFAULT_ROUTINE.forEach(slot => {
+        const item = document.createElement('div');
+        item.className = "p-3 bg-gray-950 rounded-xl border border-gray-800 flex items-center justify-between text-xs";
+        item.innerHTML = `
+          <div class="flex items-center space-x-3">
+            <span class="font-mono text-indigo-400 font-bold">${slot.time}</span>
+            <span class="text-gray-200 font-medium">${userState.isHolidayMode ? 'Self Study & Heavy Question Bank Sprint' : slot.task}</span>
+          </div>
+          <span class="px-2 py-0.5 rounded text-[10px] font-bold ${userState.isHolidayMode ? 'bg-amber-950 text-amber-300' : 'bg-gray-800 text-gray-400'}">
+            ${userState.isHolidayMode ? 'HOLIDAY SPRINT' : slot.type.toUpperCase()}
+          </span>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function toggleHolidayMode() {
+      userState.isHolidayMode = !userState.isHolidayMode;
+      const btn = document.getElementById('holidayBtn');
+      btn.innerHTML = `<i class="ri-contrast-2-line"></i> Holiday/Self-Study Mode: ${userState.isHolidayMode ? 'ON' : 'OFF'}`;
+      saveState();
+      renderTimetable();
+    }
+
+    // ==========================================
+    // 7. WEBRTC AI PROCTORED VIVA ENGINE
+    // ==========================================
+    let webcamStream = null;
+
+    async function startWebcam() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+        webcamStream = stream;
+        const video = document.getElementById('vivaCamVideo');
+        video.srcObject = stream;
+        video.classList.remove('hidden');
+        document.getElementById('vivaCamPlaceholder').classList.add('hidden');
+      } catch (err) {
+        alert("Camera access denied or unverified. Ensure browser permissions allow camera.");
+      }
+    }
+
+    function speakAI(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 1.0;
+        utterance.pitch = 1.0;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+
+    function startAIViva() {
+      let latestLog = userState.dailyLogs[0];
+      let question = "Tell me the core formula and concept you studied today in your lecture.";
+      if (latestLog && latestLog.notes) {
+        question = `According to your log on ${latestLog.topics}: Explain the key concept: "${latestLog.notes.slice(0, 60)}..."`;
+      }
+
+      document.getElementById('vivaSpeechText').innerText = `"${question}"`;
+      speakAI(question);
+    }
+
+    function simulateUserAnswer() {
+      const response = "Correct explanation verified by AI Proctor! Stage milestone unlocked.";
+      document.getElementById('vivaSpeechText').innerText = `"${response}"`;
+      speakAI(response);
+    }
+
+    // ==========================================
+    // 8. BACKLOG SIREN SOUND & BANNER
+    // ==========================================
+    let audioCtx = null;
+    let sirenOsc = null;
+
+    function toggleSirenAlarm() {
+      userState.isSirenOn = !userState.isSirenOn;
+      const banner = document.getElementById('sirenBanner');
+
+      if (userState.isSirenOn) {
+        banner.classList.remove('hidden');
+        startAudioSiren();
+      } else {
+        banner.classList.add('hidden');
+        stopAudioSiren();
+      }
+    }
+
+    function startAudioSiren() {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        sirenOsc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        sirenOsc.type = 'sawtooth';
+        sirenOsc.frequency.setValueAtTime(440, audioCtx.currentTime);
+        sirenOsc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.5);
+
+        sirenOsc.connect(gain);
+        gain.connect(audioCtx.destination);
+        sirenOsc.start();
+      } catch (e) {
+        console.log("Audio Context initialization deferred");
+      }
+    }
+
+    function stopAudioSiren() {
+      if (sirenOsc) {
+        try { sirenOsc.stop(); } catch(e){}
+        sirenOsc = null;
+      }
+    }
+
+    // ==========================================
+    // 9. HORROR MOVIE BREAK TIMER
+    // ==========================================
+    function startBreakTimer(minutes) {
+      clearInterval(breakTimerInterval);
+      let secondsLeft = minutes * 60;
+
+      function updateDisplay() {
+        const m = Math.floor(secondsLeft / 60);
+        const s = secondsLeft % 60;
+        document.getElementById('breakDisplay').innerText = 
+          `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+      }
+
+      updateDisplay();
+      breakTimerInterval = setInterval(() => {
+        secondsLeft--;
+        if (secondsLeft <= 0) {
+          clearInterval(breakTimerInterval);
+          document.getElementById('breakDisplay').innerText = "00:00";
+          speakAI("Break time is over! Resume study session now!");
+        } else {
+          updateDisplay();
+        }
+      }, 1000);
+    }
+
+    function stopBreakTimer() {
+      clearInterval(breakTimerInterval);
+      document.getElementById('breakDisplay').innerText = "15:00";
+    }
+
+    // ==========================================
+    // 10. BACKUP EXPORT & IMPORT
+    // ==========================================
+    function exportDataJSON() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(userState, null, 2));
+      const dlAnchor = document.createElement('a');
+      dlAnchor.setAttribute("href", dataStr);
+      dlAnchor.setAttribute("download", `NEET2027_Backup_${new Date().toISOString().slice(0,10)}.json`);
+      document.body.appendChild(dlAnchor);
+      dlAnchor.click();
+      dlAnchor.remove();
+    }
+
+    function importDataJSON(event) {
+      const fileReader = new FileReader();
+      fileReader.onload = function(e) {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          userState = parsed;
+          saveState();
+          loadState();
+          alert("Data backup successfully restored!");
+        } catch (err) {
+          alert("Invalid backup JSON file.");
+        }
+      };
+      fileReader.readAsText(event.target.files[0]);
+    }
+
+    // ==========================================
+    // TAB SWITCHER
+    // ==========================================
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(sec => sec.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('text-indigo-400', 'border-indigo-500');
+        btn.classList.add('text-gray-400', 'border-transparent');
+      });
+
+      document.getElementById(`sec-${tabId}`).classList.remove('hidden');
+      const activeBtn = document.getElementById(`tab-${tabId}`);
+      if (activeBtn) {
+        activeBtn.classList.add('text-indigo-400', 'border-indigo-500');
+      }
+    }
+
+    // INITIALIZATION ON LOAD
+    window.onload = function() {
+      loadState();
+    };
+  </script>
+</body>
+</html>
